@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "💬 Questions & aide (Discussions)"
+    url: https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions
+    about: "Posez vos questions, demandez de l’aide ou échangez avec la communauté."
+  - name: "💡 Idées & suggestions (Discussions)"
+    url: https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions/new?category=ideas
+    about: "Proposez une idée ou une amélioration avant d’ouvrir une issue si besoin."
+  - name: "🔐 Signaler une vulnérabilité (Sécurité)"
+    url: https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/security/policy
+    about: "Merci de ne pas ouvrir d’issue publique pour une faille de sécurité. Consultez la politique de sécurité."

@@ -1,0 +1,17 @@
+# Fichier de sponsoring GitHub — DJOUSSE TECH MD
+# Renseigne les identifiants des plateformes actives et supprime/commente les autres.
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+
+github: [] # ex. [Beaute-Gar]
+patreon: # ex. djoussetech
+open_collective: # ex. djousse-tech-md
+ko_fi: # ex. djoussetech
+tidelift: # ex. npm/<package-name>
+community_bridge: # ex. project-name
+liberapay: # ex. djoussetech
+issuehunt: # ex. Beaute-Gar
+lfx_crowdfunding: # ex. project-name
+polar: # ex. djoussetech
+buy_me_a_coffee: # ex. djoussetech
+thanks_dev: # ex. u/gh/Beaute-Gar
+custom: [] # ex. ['https://votre-lien-de-soutien.example']
