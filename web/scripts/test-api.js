@@ -107,7 +107,7 @@ function stubFetch(handler) {
     assert.ok(!/PAIRING_API_TOKEN/.test(res.payload.error), 'le nom du secret ne doit pas fuiter');
   });
 
-  await test('pair : code relayé et corps envoyé au service Render', async () => {
+  await test('pair : code relayé et corps envoyés au service de jumelage', async () => {
     process.env.PAIRING_API_TOKEN = 'secret-test';
     process.env.PAIRING_API_URL = 'https://bot.test';
     let seen = null;

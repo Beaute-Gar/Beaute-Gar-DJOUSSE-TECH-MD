@@ -63,7 +63,8 @@ async function readPayload(req) {
 }
 
 function pairingApiUrl(pathname) {
-  const configured = process.env.PAIRING_API_URL || 'https://djousse-tech-md.onrender.com';
+  const configured = process.env.PAIRING_API_URL;
+  if (!configured) throw new Error('missing-url');
   const base = new URL(configured);
   const local = ['localhost', '127.0.0.1'].includes(base.hostname);
   if (base.protocol !== 'https:' && !(local && base.protocol === 'http:')) throw new Error('invalid-protocol');

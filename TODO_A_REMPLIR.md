@@ -28,7 +28,7 @@ Les éléments ci-dessous n’ont pas pu être renseignés ou finalisés automat
 
 ## C. Sécurité, secrets et déploiement (web)
 - [ ] **Pas de dépôt Git** : impossible d’auditer l’historique. Si ce code a été poussé à distance, auditer l’historique complet (gitleaks/`git log -p`) et **révoquer/régénérer** tout secret potentiellement exposé (`PAIRING_API_TOKEN`, `SESSION_BACKUP_KEY`, clés IA/fournisseurs, sessions/credentials WhatsApp, etc.). `.env` racine présent localement : vérifier qu’il n’a jamais été publié.
-- [ ] Configurer dans Vercel (Production/Preview) : `PAIRING_API_URL` **ou** la nouvelle URL API publique (`PUBLIC_API_URL`/équivalent selon câblage retenu), `PAIRING_API_TOKEN`, `SITE_ORIGIN` (= domaine de production), `TURNSTILE_SECRET_KEY` si anti-spam activé.
+- [ ] Configurer dans Vercel (Production/Preview) : `PAIRING_API_URL` = URL HTTPS du backend local exposé via **ngrok** (ex. `https://<domaine>.ngrok-free.app`, sans slash final) pour les fonctions `/api/pair` et `/api/status`, et/ou `PUBLIC_API_URL` (même URL) pour appel direct du front ; `PAIRING_API_TOKEN` (identique au backend local) ; `SITE_ORIGIN` (= domaine de production) ; `TURNSTILE_SECRET_KEY` si anti-spam activé. **Ne pas utiliser Render comme serveur.**
 - [ ] **Cloudflare Turnstile** : créer site, renseigner clé publique côté front et `TURNSTILE_SECRET_KEY` côté serveur ; sans clés, protection partielle (honeypot + rate limiting).
 - [ ] **Redéployer** le site `web/` (projet Vercel `djousse-tech-md`) : la prod servait des données catalogue obsolètes ; vérifier `/data/commands.json` et `/api/status` après déploiement.
 - [ ] Restreindre l’indexation des **prévisualisations/staging** (noindex / `X-Robots-Tag` selon environnement).
