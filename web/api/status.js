@@ -19,20 +19,27 @@ function normalizedOrigin(value) {
   }
 }
 
-function expectedOrigin(req) {
-  if (process.env.SITE_ORIGIN) return normalizedOrigin(process.env.SITE_ORIGIN);
+function requestOrigin(req) {
   const forwardedHost = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim();
   const forwardedProto = String(req.headers['x-forwarded-proto'] || 'https').split(',')[0].trim();
   return forwardedHost ? normalizedOrigin(`${forwardedProto}://${forwardedHost}`) : '';
 }
 
-module.exports = async function status(req, res) {
+function resolveAllowedOrigin(req) {
   const originHeader = String(req.headers.origin || '');
-  const expected = expectedOrigin(req);
-  const origin = originHeader && normalizedOrigin(originHeader) === expected ? expected : '';
-  
+  if (!originHeader) return { originHeader, allowed: '' };
+  const normalized = normalizedOrigin(originHeader);
+  const configured = normalizedOrigin(process.env.SITE_ORIGIN || '');
+  const self = requestOrigin(req);
+  const allowed = (normalized && (normalized === configured || normalized === self)) ? normalized : '';
+  return { originHeader, allowed };
+}
+
+module.exports = async function status(req, res) {
+  const { originHeader, allowed: origin } = resolveAllowedOrigin(req);
+
   if (originHeader && !origin) return sendJson(res, 403, { error: 'Origine refusée.' });
-  
+
   if (req.method === 'OPTIONS') {
     if (!origin) return sendJson(res, 403, { error: 'Origine refusée.' });
     res.writeHead(204, {
