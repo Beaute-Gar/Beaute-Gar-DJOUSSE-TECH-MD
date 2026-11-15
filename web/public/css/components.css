@@ -1,4 +1,4 @@
-/* En-tête et navigation */
+﻿/* En-tête et navigation */
 .site-header {
   position: sticky;
   z-index: 50;
@@ -93,7 +93,7 @@
 .hero-copy .lead { margin-bottom: 28px; }
 .hero-note { display: flex; align-items: center; gap: 9px; margin-top: 22px; color: var(--muted); font-size: .83rem; }
 .hero-note .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 75%, transparent); }
-.chat-window { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: color-mix(in srgb, var(--surface) 94%, #06120c); box-shadow: 0 32px 90px rgb(0 0 0 / 30%); transform: rotate(1deg); }
+.chat-window { overflow: hidden; border: 1px solid var(--border); border-radius: 18px; background: color-mix(in srgb, var(--surface) 96%, #09090b); box-shadow: 0 32px 90px rgb(0 0 0 / 30%); transform: rotate(1deg); }
 .chat-top { display: flex; align-items: center; gap: 12px; padding: 15px 18px; border-bottom: 1px solid var(--border); }
 .chat-avatar { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 12px; background: var(--accent); }
 .chat-contact { display: grid; flex: 1; line-height: 1.25; }
@@ -147,8 +147,8 @@
 .toc strong { display: block; margin-bottom: 12px; font: 600 .72rem var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
 .toc a { display: block; padding: 6px 0; color: var(--muted); font-size: .82rem; text-decoration: none; }
 .toc a:hover { color: var(--accent); }
-.code-block { position: relative; margin-block: 14px; border: 1px solid var(--border); border-radius: 12px; background: #080f15; }
-[data-theme="light"] .code-block { background: #101922; }
+.code-block { position: relative; margin-block: 14px; border: 1px solid var(--border); border-radius: 12px; background: #0d0d12; }
+.code-block { background: #0d0d12; }
 .code-block pre { margin: 0; padding: 22px 18px; color: #d2e4df; font-size: .8rem; line-height: 1.7; }
 .code-block .copy-button { position: absolute; top: 9px; right: 9px; z-index: 1; }
 .copy-button { min-height: 34px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; color: var(--text); background: var(--surface); font-size: .75rem; font-weight: 700; cursor: pointer; }

@@ -2,22 +2,22 @@
 
 :root {
   color-scheme: dark;
-  --accent: #2ecc71;
-  --accent-2: #00b894;
-  --whatsapp: #25d366;
-  --surface: #111b26;
-  --surface-raised: #152332;
-  --warn: #e67e22;
-  --bg: #0b1118;
-  --text: #e8eef5;
-  --muted: #a8b8c7;
-  --border: #263746;
-  --danger: #ff7770;
-  --focus: #80ffc0;
-  --btn-bg: #2ecc71;
-  --btn-text: #07140c;
-  --shadow: 0 18px 50px rgb(0 0 0 / 24%);
-  --radius: 14px;
+  --accent: #00d4ff;
+  --accent-2: #b300ff;
+  --whatsapp: #00d4ff;
+  --surface: rgba(20, 20, 25, 0.85);
+  --surface-raised: #1a1a22;
+  --warn: #f0b429;
+  --bg: #09090b;
+  --text: #e0e0e0;
+  --muted: #808080;
+  --border: rgba(0, 212, 255, 0.2);
+  --danger: #ff6b6b;
+  --focus: #00d4ff;
+  --btn-bg: #00d4ff;
+  --btn-text: #000000;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --radius: 12px;
   --radius-sm: 9px;
   --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Consolas, monospace;
@@ -26,42 +26,44 @@
   --ease: cubic-bezier(.2, .75, .25, 1);
 }
 
-:root[data-theme="light"] {
-  color-scheme: light;
-  --accent: #168447;
-  --accent-2: #087f67;
-  --whatsapp: #138b43;
-  --surface: #fff;
-  --surface-raised: #f1f6f3;
-  --warn: #9a4e05;
-  --bg: #f6f9fb;
-  --text: #101b24;
-  --muted: #526475;
-  --border: #d4e0e7;
-  --danger: #b42318;
-  --focus: #075b34;
-  --btn-bg: #168447;
-  --btn-text: #fff;
-  --shadow: 0 18px 46px rgb(21 43 59 / 10%);
+/* Palette unifiée (même couleurs que l'animation d'ouverture) */
+:root[data-theme="light"],
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --accent: #00d4ff;
+  --accent-2: #b300ff;
+  --whatsapp: #00d4ff;
+  --surface: rgba(20, 20, 25, 0.85);
+  --surface-raised: #1a1a22;
+  --warn: #f0b429;
+  --bg: #09090b;
+  --text: #e0e0e0;
+  --muted: #808080;
+  --border: rgba(0, 212, 255, 0.2);
+  --danger: #ff6b6b;
+  --focus: #00d4ff;
+  --btn-bg: #00d4ff;
+  --btn-text: #000000;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
-    color-scheme: light;
-    --accent: #168447;
-    --accent-2: #087f67;
-    --whatsapp: #138b43;
-    --surface: #fff;
-    --surface-raised: #f1f6f3;
-    --warn: #9a4e05;
-    --bg: #f6f9fb;
-    --text: #101b24;
-    --muted: #526475;
-    --border: #d4e0e7;
-    --danger: #b42318;
-    --focus: #075b34;
-    --btn-bg: #168447;
-    --btn-text: #fff;
-    --shadow: 0 18px 46px rgb(21 43 59 / 10%);
+    color-scheme: dark;
+    --accent: #00d4ff;
+    --accent-2: #b300ff;
+    --whatsapp: #00d4ff;
+    --surface: rgba(20, 20, 25, 0.85);
+    --surface-raised: #1a1a22;
+    --warn: #f0b429;
+    --bg: #09090b;
+    --text: #e0e0e0;
+    --muted: #808080;
+    --border: rgba(0, 212, 255, 0.2);
+    --danger: #ff6b6b;
+    --focus: #00d4ff;
+    --btn-bg: #00d4ff;
+    --btn-text: #000000;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
   }
 }
