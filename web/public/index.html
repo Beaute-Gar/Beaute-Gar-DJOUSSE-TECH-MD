@@ -76,11 +76,14 @@
       flex: 0 0 auto;
     }
     .dj-splash-logo img, .dj-splash-logo .dj-splash-avatar {
-      width: 100%; height: 100%; border-radius: 50%; display: block; object-fit: cover; background: #111;
+      width: 100%; height: 100%; border-radius: 50%; display: block; object-fit: cover;
     }
+    .dj-splash-logo img { background: #111; }
     .dj-splash-avatar {
-      display: grid; place-items: center; color: #00d4ff; font-size: 2rem; font-weight: 700;
-      background: radial-gradient(circle at 30% 30%, #1a1f2b, #09090b);
+      display: grid; place-items: center; color: #00d4ff; font-size: 0.62rem; font-weight: 700;
+      font-style: italic; line-height: 1.2; text-align: center; padding: 8px;
+      background: transparent; border-radius: 0;
+      letter-spacing: 0.02em;
     }
     .dj-splash-box {
       position: relative; width: 100%;
@@ -196,7 +199,7 @@
     <div class="dj-splash-wrap">
       <div class="dj-splash-logo" aria-hidden="true">
         <img id="djSplashLogoImg" src="./assets/logo.png" alt="">
-        <div class="dj-splash-avatar" id="djSplashAvatar" hidden>DT</div>
+        <div class="dj-splash-avatar" id="djSplashAvatar" hidden>B-E-A-U-T-E-G-A-R</div>
       </div>
       <div id="djSplashLoading" class="dj-splash-screen">
         <div class="dj-splash-box">
