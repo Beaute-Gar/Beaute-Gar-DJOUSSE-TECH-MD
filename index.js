@@ -4,6 +4,7 @@ const path     = require('path');
 const fs       = require('fs');
 const pino     = require('pino');
 const readline = require('readline');
+const http = require('http');
 
 const makeWASocket = require('@whiskeysockets/baileys').default;
 const {
@@ -338,6 +339,133 @@ async function restoreSessions() {
   return started;
 }
 
+// --- API HTTP locale (jumelage / statut) pour tunnel ngrok -> Vercel ---
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let data = '';
+    req.on('data', (chunk) => {
+      data += chunk;
+      if (data.length > 10000) { req.destroy(); reject(new Error('body-too-large')); }
+    });
+    req.on('end', () => {
+      if (!data) return resolve({});
+      try { resolve(JSON.parse(data)); } catch { reject(new Error('invalid-json')); }
+    });
+    req.on('error', reject);
+  });
+}
+
+function sendJson(res, status, body) {
+  const payload = JSON.stringify(body);
+  res.writeHead(status, {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+    'Content-Length': Buffer.byteLength(payload)
+  });
+  res.end(payload);
+}
+
+function pairingStatus() {
+  let hasWaiting = false;
+  for (const [, sock] of activeSockets) {
+    try {
+      if (sock && sock.authState && sock.authState.creds && sock.authState.creds.registered) {
+        return 'connected';
+      }
+      if (sock) hasWaiting = true;
+    } catch {}
+  }
+  if (hasWaiting) return 'waiting';
+  return 'disconnected';
+}
+
+async function waitForPairingSocket(number, timeoutMs = 30000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const sock = activeSockets.get(number);
+    if (sock && sock.authState && sock.authState.creds && !sock.authState.creds.registered) {
+      return sock;
+    }
+    if (sock && sock.authState && sock.authState.creds && sock.authState.creds.registered) {
+      const err = new Error('already-registered');
+      err.code = 'ALREADY_REGISTERED';
+      throw err;
+    }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  return activeSockets.get(number) || null;
+}
+
+function startPairingServer() {
+  const token = process.env.PAIRING_API_TOKEN || '';
+  const host = process.env.PAIRING_HOST || process.env.HOST || '127.0.0.1';
+  const port = Number(process.env.PAIRING_PORT || process.env.PORT || 3001);
+  if (!Number.isFinite(port) || port <= 0) return;
+
+  const server = http.createServer(async (req, res) => {
+    try {
+      const url = new URL(req.url || '/', 'http://localhost');
+
+      if (req.method === 'GET' && (url.pathname === '/health' || url.pathname === '/')) {
+        return sendJson(res, 200, { ok: true, status: 'ok', pairing: pairingStatus() });
+      }
+
+      if (token && req.headers['x-api-token'] !== token) {
+        return sendJson(res, 401, { error: 'Non autorisé.' });
+      }
+
+      if (req.method === 'GET' && url.pathname === '/status') {
+        return sendJson(res, 200, { status: pairingStatus() });
+      }
+
+      if (req.method === 'POST' && url.pathname === '/pair') {
+        const body = await readBody(req).catch((e) => { throw e; });
+        const raw = body && (body.number || body.phone || body.session || '');
+        const number = String(raw).replace(/[^0-9]/g, '');
+        if (number.length < 8 || number.length > 15) {
+          return sendJson(res, 400, { error: 'Numéro invalide.' });
+        }
+
+        let sock = activeSockets.get(number);
+        if (sock && sock.authState && sock.authState.creds && sock.authState.creds.registered) {
+          return sendJson(res, 409, { error: 'Cette session est déjà jumelée.' });
+        }
+
+        console.log(`[pair-api] Demande de code pour ${number}...`);
+        if (!sock) {
+          await startSession(number);
+        }
+
+        await new Promise((r) => setTimeout(r, 3000));
+        sock = await waitForPairingSocket(number, 30000).catch((e) => { throw e; });
+        if (!sock) return sendJson(res, 503, { error: 'Session indisponible. Réessayez.' });
+        if (sock.authState && sock.authState.creds && sock.authState.creds.registered) {
+          return sendJson(res, 409, { error: 'Cette session est déjà jumelée.' });
+        }
+
+        const code = await sock.requestPairingCode(number);
+        console.log(style.renderSuccess([`[pair-api] Code d'appairage ${number} : ${code}`]));
+        return sendJson(res, 200, { code: String(code) });
+      }
+
+      return sendJson(res, 404, { error: 'Not found' });
+    } catch (e) {
+      if (e && e.code === 'ALREADY_REGISTERED') {
+        return sendJson(res, 409, { error: 'Cette session est déjà jumelée.' });
+      }
+      if (e && e.message === 'invalid-json') return sendJson(res, 400, { error: 'JSON invalide.' });
+      console.error('[pair-api]', e && e.message ? e.message : e);
+      if (!res.headersSent) return sendJson(res, 503, { error: 'Service de jumelage indisponible.' });
+    }
+  });
+
+  server.on('error', (err) => console.error('[pair-api] serveur:', err.message));
+  server.listen(port, host, () => {
+    console.log(`[pair-api] API locale sur http://${host}:${port} (tunnel ngrok -> Vercel)`);
+  });
+  return server;
+}
+
 // --- GESTIONNAIRE DE SESSIONS AU DEMARRAGE ---
 async function startBot() {
   await installLogger({ dir: path.join(paths.storage, 'logs'), keepDays: 14 });
@@ -380,6 +508,9 @@ async function startBot() {
       await closeLogger();
     }
   });
+
+  // API HTTP locale (pairing/status) pour exposition via ngrok
+  startPairingServer();
 
   // Sauvegarde chiffree des sessions (cle : SESSION_BACKUP_KEY)
   const backupDir = path.join(paths.storage, 'backups');
