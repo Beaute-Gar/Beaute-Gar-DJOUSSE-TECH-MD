@@ -32,7 +32,12 @@ async function handleMessage(sock, m) {
   // le reglage global "botNumber" est ecrase par la derniere connectee.
   const myRealNumber = normalizeJid(sock.user && sock.user.id) || db.getSetting('botNumber');
   const senderJid = m.key.participant || m.key.remoteJid;
-  const isOwnerMsg = !!(m.key.fromMe || (myRealNumber && String(senderJid).includes(myRealNumber)));
+  const auth = require('../lib/auth');
+  const isOwnerMsg = !!(
+    m.key.fromMe ||
+    (myRealNumber && String(senderJid).includes(myRealNumber)) ||
+    auth.isOwner(sock, m, config, from)
+  );
 
   // En mode self, les membres peuvent participer aux jeux, mais leurs commandes
   // ne reçoivent pas de réponse. Les protections doivent quand même s'appliquer.
