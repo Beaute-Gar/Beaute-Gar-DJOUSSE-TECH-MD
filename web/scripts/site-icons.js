@@ -1,55 +1,32 @@
 'use strict';
 /**
- * web/scripts/site-icons.js — génère les icônes PWA du site (public/assets/icons/)
- * ─────────────────────────────────────────────────────────────────────────────
- * Source : public/assets/logo.svg (charte verte #25d366 / #0e9f4f / #04140c).
- *
- *   icon-192.png · icon-512.png   icônes classiques (tuile arrondie du SVG)
- *   maskable-512.png              icône « maskable » plein cadre (safe zone)
- *   apple-touch-icon.png          iOS (180, plein cadre, sans transparence)
- *   favicon-32.png                favicon raster de secours
- *
+ * web/scripts/site-icons.js — génère les icônes PWA/favicons du site
+ * Source : logo racine du projet (logo.jpg/png).
  * Usage : node web/scripts/site-icons.js
- * Dépendance : `sharp`, déjà utilisée par le bot (aucune installation en plus).
- *
- * Le site reste vectoriel (logo.svg) : ces PNG servent au manifeste PWA,
- * à l'installation Android et au wrapping APK (TWA/Capacitor).
  */
 const fs = require('node:fs');
 const path = require('node:path');
 const sharp = require('sharp');
 
+const ROOT = path.join(__dirname, '..', '..');
 const PUB = path.join(__dirname, '..', 'public');
-const SVG = fs.readFileSync(path.join(PUB, 'assets', 'logo.svg'));
+const SRC = path.join(ROOT, 'logo.jpg');
 const OUT = path.join(PUB, 'assets', 'icons');
 
-const GREEN_A = '#25d366';
-const GREEN_B = '#0e9f4f';
+const BG = '#0b1118';
 
-/** Fond carré en dégradé (maskable / iOS : aucun coin transparent). */
-function gradientSquare(size) {
-  return Buffer.from(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">`
-    + '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
-    + `<stop offset="0" stop-color="${GREEN_A}"/><stop offset="1" stop-color="${GREEN_B}"/>`
-    + '</linearGradient></defs>'
-    + `<rect width="${size}" height="${size}" fill="url(#g)"/></svg>`,
-  );
+function bgSquare(size) {
+  return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><rect width="${size}" height="${size}" fill="${BG}"/></svg>`);
 }
 
-/** Rasterise le logo à la taille demandée (PNG, fond transparent). */
 function logoPng(size) {
-  return sharp(SVG, { density: 512 }).resize(size, size, { fit: 'contain' }).png().toBuffer();
+  return sharp(SRC).resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
 }
 
-/** Logo réduit et centré sur un fond plein cadre. */
 async function onFullBleed(size, scale) {
   const inner = Math.round(size * scale);
   const logo = await logoPng(inner);
-  return sharp(gradientSquare(size))
-    .composite([{ input: logo, gravity: 'center' }])
-    .png()
-    .toBuffer();
+  return sharp(bgSquare(size)).composite([{ input: logo, gravity: 'center' }]).png().toBuffer();
 }
 
 async function write(name, buffer) {
@@ -60,15 +37,33 @@ async function write(name, buffer) {
 }
 
 async function main() {
+  if (!fs.existsSync(SRC)) throw new Error(`Source introuvable: ${SRC}`);
   fs.mkdirSync(OUT, { recursive: true });
 
   await write('icon-192.png', await logoPng(192));
   await write('icon-512.png', await logoPng(512));
-  await write('maskable-512.png', await onFullBleed(512, 0.62));
-  await write('apple-touch-icon.png', await onFullBleed(180, 0.8));
+  await write('maskable-512.png', await onFullBleed(512, 0.72));
+  await write('apple-touch-icon.png', await onFullBleed(180, 0.82));
   await write('favicon-32.png', await logoPng(32));
 
-  // Contrôle d'intégrité : magic bytes PNG + taille annoncée dans le manifeste.
+  // favicon.ico (32x32 PNG encapsulé)
+  const png32 = fs.readFileSync(path.join(OUT, 'favicon-32.png'));
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0);
+  header.writeUInt16LE(1, 2);
+  header.writeUInt16LE(1, 4);
+  const entry = Buffer.alloc(16);
+  entry.writeUInt8(32, 0);
+  entry.writeUInt8(32, 1);
+  entry.writeUInt8(0, 2);
+  entry.writeUInt8(0, 3);
+  entry.writeUInt16LE(1, 4);
+  entry.writeUInt16LE(32, 6);
+  entry.writeUInt32LE(png32.length, 8);
+  entry.writeUInt32LE(22, 12);
+  fs.writeFileSync(path.join(PUB, 'favicon.ico'), Buffer.concat([header, entry, png32]));
+  console.log('[ICONS] favicon.ico        régénéré ✓');
+
   const expected = { 'icon-192.png': 192, 'icon-512.png': 512, 'maskable-512.png': 512, 'apple-touch-icon.png': 180, 'favicon-32.png': 32 };
   for (const [name, size] of Object.entries(expected)) {
     const file = path.join(OUT, name);
@@ -77,7 +72,7 @@ async function main() {
     const meta = await sharp(buf).metadata();
     if (meta.width !== size || meta.height !== size) throw new Error(`${name} : ${meta.width}×${meta.height} au lieu de ${size}×${size}`);
   }
-  console.log('[ICONS] ✅ 5 icônes générées, tailles et PNG vérifiés');
+  console.log('[ICONS] ✅ icônes générées depuis le logo projet, tailles vérifiées');
 }
 
 main().catch((error) => {
