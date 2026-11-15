@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="color-scheme" content="dark light"><meta name="theme-color" content="#2ecc71">
+  <title>Installation et hébergement — DJOUSSE TECH MD</title>
+  <meta name="description" content="Installe DJOUSSE TECH MD, configure son environnement et héberge le worker WhatsApp sur un VPS, en Docker, sur Render ou Fly.io.">
+  <link rel="canonical" href="https://[A_REMPLIR]/installation.html">
+  <meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:title" content="Installation et hébergement — DJOUSSE TECH MD"><meta property="og:description" content="Prérequis, configuration .env, démarrage et options d’hébergement multiplateforme."><meta property="og:url" content="https://[A_REMPLIR]/installation.html"><meta property="og:site_name" content="DJOUSSE TECH MD"><meta property="og:image" content="https://[A_REMPLIR]/assets/og-image.png"><meta property="og:image:alt" content="Aperçu du site [A_REMPLIR]">
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Installation et hébergement — DJOUSSE TECH MD"><meta name="twitter:description" content="Guide de déploiement du bot WhatsApp."><meta name="twitter:image" content="https://[A_REMPLIR]/assets/og-image.png">
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="./site.webmanifest"><link rel="manifest" href="./manifest.webmanifest">
+  <script src="./js/theme-init.js"></script>
+  <link rel="stylesheet" href="./css/tokens.css"><link rel="stylesheet" href="./css/base.css"><link rel="stylesheet" href="./css/components.css">
+  <script src="./js/config.js"></script>
+  <script type="module" src="./js/main.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html" aria-label="DJOUSSE TECH MD, accueil">
+        <img src="./assets/logo.svg" width="38" height="38" alt="">
+        <span class="brand-name">DJOUSSE TECH<small>ASSISTANT WHATSAPP TEXTE</small></span>
+      </a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="navigation" aria-label="Ouvrir le menu">☰</button>
+      <nav class="site-nav" id="navigation" data-site-nav data-open="false" aria-label="Navigation principale">
+        <a href="./commandes.html">Commandes</a>
+        <a href="./connexion.html">Connexion</a>
+        <a href="./installation.html">Installation</a>
+        <a href="./securite.html">Sécurité</a>
+        <a href="./faq.html">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" type="button" data-theme-toggle aria-label="Activer le thème clair" title="Changer de thème"><span data-theme-icon aria-hidden="true">☼</span></button>
+        <a class="github-link" data-link="github" href="https://github.com/Beaute-Gar/DJOUSSE-TECH-MD" aria-label="Ouvrir le dépôt GitHub de DJOUSSE TECH MD">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.12.08 1.72 1.15 1.72 1.15 1 .1.83 2.02 3.25 1.54.1-.73.4-1.22.7-1.5-2.5-.28-5.13-1.25-5.13-5.56 0-1.23.44-2.24 1.16-3.03-.12-.28-.5-1.44.11-3 0 0 .95-.3 3.08 1.16a10.7 10.7 0 0 1 5.6 0c2.13-1.45 3.08-1.16 3.08-1.16.61 1.56.23 2.72.11 3 .72.79 1.16 1.8 1.16 3.03 0 4.32-2.64 5.27-5.15 5.55.4.35.75 1.03.75 2.08v3.08c0 .3.2.65.78.54A11.2 11.2 0 0 0 12 .8Z"/></svg><span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+<main id="contenu">
+  <section class="page-hero"><div class="container"><span class="eyebrow">Documentation</span><h1>Installer et héberger ton bot.</h1><p class="lead">Le site vitrine est statique; le worker WhatsApp doit tourner séparément sur un environnement persistant.</p></div></section>
+  <section class="container section--compact"><div class="toc-layout">
+    <nav class="toc" aria-label="Sommaire de l’installation"><strong>Sur cette page</strong><label class="field small" for="install-search"><span>Rechercher</span><input class="input" id="install-search" type="search" placeholder="Ex. Docker, pairing…" data-install-search></label><a href="#prerequis">Prérequis</a><a href="#installation">Installation</a><a href="#configuration">Configuration</a><a href="#demarrage">Démarrer</a><a href="#service">Service détaché</a><a href="#hebergement">Hébergement cloud</a><a href="#regles">Règles d’or</a>
+    </nav>
+    <article class="prose">
+      <section id="prerequis" data-search-section><h2>Prérequis</h2><ul><li><strong>Node.js ≥ 22.22</strong> (exigé par <code>@distube/ytdl-core</code> et Baileys) ; vérifie avec <code>node -v</code>.</li><li>Un numéro WhatsApp secondaire est fortement conseillé.</li><li><code>ffmpeg</code> est fourni via <code>ffmpeg-static</code>; rien à installer à l’extérieur.</li><li>Docker est facultatif, uniquement pour l’hébergement en conteneur.</li></ul></section>
+      <section id="installation" data-search-section><h2>Cloner et installer</h2><div class="code-block"><button class="copy-button" type="button" data-copy-target="install-clone">Copier</button><pre id="install-clone">git clone https://github.com/Beaute-Gar/DJOUSSE-TECH-MD.git
+cd DJOUSSE-TECH-MD
+npm install</pre></div></section>
+      <section id="configuration" data-search-section><h2>Configurer l’instance</h2><p>Copie <code>.env.example</code> vers <code>.env</code> à la racine, puis remplis au minimum l’identité et le propriétaire. Le modèle complet et commenté reste <code>.env.example</code> : ne devine pas les noms de variables.</p>
+        <div class="code-block"><button class="copy-button" type="button" data-copy-target="env-example">Copier</button><pre id="env-example"># ── Identité ─────────────────────────────────────
+BOT_NAME=DJOUSSE TECH MD
+PREFIX=.
+OWNER_NUMBER=237XXXXXXXXX
+OWNER_NAME=DJOUSSE TECH
+
+# ── Sessions et sauvegarde ───────────────────────
+# Clé de sauvegarde chiffrée des sessions (recommandé)
+SESSION_BACKUP_KEY=
+
+# ── Démarrage et anti-ban ────────────────────────
+AUTO_START=true
+HUMANIZE=true
+HUMANIZE_PER_MINUTE=18
+
+# ── IA (facultatif) ──────────────────────────────
+# Ordre essayé : Anthropic → Gemini → Groq → OpenRouter
+# puis Pollinations (gratuit, sans clé). AV_AI=off coupe l’IA.
+ANTHROPIC_API_KEY=
+GEMINI_KEY=
+GROQ_API_KEY=
+OPENROUTER_API_KEY=
+AV_AI=on
+
+# ── Statuts automatiques ─────────────────────────
+# AUTO_STATUS=off pour ne rien publier
+AUTO_STATUS=on
+STATUS_LIKE=true
+STATUS_LIKE_EMOJI=❤️
+
+# ── Jeux, pronostics, mode nuit ──────────────────
+GAMES_AI=on
+PROMO_TZ=Africa/Douala
+NIGHT_TZ=Africa/Douala
+
+# ── Protections (valeurs par défaut) ─────────────
+BADWORDS_LIGHT=true
+BADWORDS_KICK=</pre></div>
+        <p class="muted small">Toutes les clés sont facultatives sauf l’identité. Sans clé IA, les commandes concernées renvoient un message explicite. Les protections se règlent ensuite par commande dans chaque groupe (<code>.antilink on</code>, <code>.welcome on</code>…). Le fichier <code>.env</code> n’est jamais commité et ne doit jamais être publié.</p>
+      </section>
+      <section id="demarrage" data-search-section><h2>Démarrer</h2><div class="code-block"><button class="copy-button" type="button" data-copy-target="start-command">Copier</button><pre id="start-command">npm start</pre></div><p>La console demande un numéro : saisis-le au format international sans <code>+</code> (ex. <code>237690000000</code>). Le bot affiche ensuite un code d’appairage à 8 caractères. Dans WhatsApp : <strong>Appareils connectés → Connecter un appareil → Associer avec un numéro de téléphone</strong>. Les identifiants sont écrits dans <code>storage/sessions/</code>, ignoré par git.</p><p>Les commandes <code>liste</code> et <code>quitter</code> restent disponibles dans la console. Aux démarrages suivants, les sessions enregistrées se reconnectent seules tant que <code>AUTO_START=true</code>.</p>
+      <section id="service" data-search-section><h2>Service détaché (PM2)</h2><p><code>ecosystem.config.cjs</code> décrit le processus <code>dte-bot</code> (redémarrage automatique, limite mémoire). PM2 le maintient actif après la fermeture du terminal.</p><div class="code-block"><button class="copy-button" type="button" data-copy-target="service-commands">Copier</button><pre id="service-commands">npm install -g pm2
+pm2 start ecosystem.config.cjs
+pm2 status
+pm2 logs dte-bot
+pm2 save</pre></div><p>Le bot tient aussi son propre journal quotidien dans <code>storage/logs/</code> (un fichier par date, conservé 14 jours). Suivi en direct sous Windows : <code>Get-Content storage\logs\*.log -Tail 20 -Wait</code>.</p><p class="muted small">Sous Linux, <code>pm2 startup</code> puis <code>pm2 save</code> relancent le service après un redémarrage. Sous Windows, le plus simple est une tâche du Planificateur de tâches au démarrage de session.</p></section>
+      <section id="hebergement" data-search-section><h2>Hébergement multiplateforme</h2><p>Le bot est un worker : aucun port à exposer. Les fichiers de déploiement sont regroupés dans <code>deployment/</code>; le contexte de build reste la racine du dépôt.</p>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Plateforme</th><th>Fichier</th><th>Lancer avec</th></tr></thead><tbody>
+          <tr><th scope="row">VPS / serveur maison</th><td><code>deployment/docker-compose.yml</code></td><td><code>docker compose -f deployment/docker-compose.yml up -d --build</code></td></tr>
+          <tr><th scope="row">Docker générique</th><td><code>deployment/Dockerfile</code></td><td><code>docker build -f deployment/Dockerfile -t djousse-tech-md .</code> puis <code>docker run -d --env-file .env -v ./storage:/app/storage --name djousse-tech-md djousse-tech-md</code></td></tr>
+          <tr><th scope="row">Render</th><td><code>deployment/render.yaml</code></td><td>New → Blueprint, Blueprint Path = <code>deployment/render.yaml</code> (service <em>worker</em>)</td></tr>
+          <tr><th scope="row">Fly.io</th><td><code>deployment/fly.toml</code></td><td><code>fly deploy --config deployment/fly.toml --dockerfile deployment/Dockerfile</code></td></tr>
+          <tr><th scope="row">Vercel (site)</th><td><code>web/vercel.json</code></td><td>Root Directory = <code>web</code>; site statique + relais <code>/api</code></td></tr>
+        </tbody></table></div>
+        <p>Le site peut être hébergé séparément du worker. Vercel convient au site statique et à ses fonctions de relais; il ne remplace pas un processus WhatsApp persistant.</p>
+      </section>
+      <section id="regles" data-search-section><h2>Règles d’or du cloud</h2><ol><li><strong>Persistance :</strong> monte tout le dossier <code>storage/</code> sur un volume. Il contient les sessions, la base locale, les téléchargements et les journaux. Sans volume, chaque redémarrage impose un réappairage et efface la configuration des groupes. Les plans gratuits de Render n’ont pas de disque persistant.</li><li><strong>Code d’appairage :</strong> il s’affiche dans la console interactive du bot. Sur un worker cloud sans console, appaire une fois en local puis copie <code>storage/sessions/</code> sur le volume ; évite de lancer deux instances du même numéro.</li><li><strong>Une seule instance :</strong> garde un seul déploiement actif par numéro WhatsApp.</li><li><strong>Secrets :</strong> le fichier <code>.env</code> reste sur l’hôte (ou dans les variables de la plateforme) ; il ne va jamais dans Git ni dans le site.</li></ol></section>
+      <div class="callout"><strong>Important</strong><span>Le worker Baileys doit être exécuté dans un environnement persistant. Les fonctions serverless de Vercel servent au site et au relais sécurisé du jumelage, pas au worker WhatsApp.</span></div>
+    </article>
+  </div></section>
+</main>
+<footer class="site-footer"><div class="container footer-grid">
+    <p class="footer-copy"><strong>DJOUSSE TECH MD</strong> · Édité par DJOUSSE TECH EVOLUTION · Licence MIT<br><span data-site-tagline>Des solutions fiables pour un avenir sans limites</span> · Projet indépendant, non affilié à WhatsApp ou Meta. <span data-attribution>Créé par Djousse Uriel</span></p>
+    <nav class="footer-links" aria-label="Liens de pied de page">
+      <a href="./politique-de-confidentialite.html">Confidentialité</a>
+      <a href="./conditions-generales.html">Conditions</a>
+      <a href="./mentions-legales.html">Mentions légales</a>
+      <a href="./politique.html">Utilisation responsable</a>
+      <a href="./securite.html">Sécurité</a>
+      <a href="./faq.html">FAQ</a>
+      <a href="#" data-manage-cookies>Gérer les cookies</a>
+    </nav>
+  </div></footer>
+  <script src="./js/consent.js" defer></script>
+  <script src="./js/analytics.js" defer></script>
+  <script src="./js/errors.js" defer></script>
+</body>
+</html>

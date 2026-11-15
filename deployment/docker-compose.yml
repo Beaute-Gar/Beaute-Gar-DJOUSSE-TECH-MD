@@ -1,0 +1,20 @@
+# Docker Compose — mise en route sur n'importe quel VPS en une commande :
+#
+#   docker compose -f deployment/docker-compose.yml up -d --build
+#
+# Tout storage/ (sessions WhatsApp, base locale, jeux, logs, téléchargements)
+# vit sur l'hôte : redémarrages et mises à jour ne perdent rien.
+# Les secrets viennent de .env (env_file) — ce fichier n'est jamais
+# commité.
+services:
+  djousse:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    image: djousse-tech-md:latest
+    container_name: djousse-tech-md
+    restart: unless-stopped
+    env_file: ../.env
+    volumes:
+      - ../storage:/app/storage
+    # Aucun port exposé : le bot est un worker pur, sans serveur HTTP.

@@ -1,0 +1,222 @@
+{
+  "name": "DJOUSSE TECH MD",
+  "tagline": "Des solutions fiables pour un avenir sans limites",
+  "pitch": "Un assistant WhatsApp 100 % texte : modération de groupe, IA, médias et outils, pilotés par un menu à chiffres.",
+  "version": "4.0.0",
+  "siteOrigin": "https://djousse-tech-md-web.vercel.app",
+  "stats": {
+    "categories": 12,
+    "commands_menu": 196,
+    "commands_registry": 196,
+    "aliases": 136,
+    "protections": 13
+  },
+  "links": {
+    "github": "https://github.com/Beaute-Gar/DJOUSSE-TECH-MD",
+    "issues": "https://github.com/Beaute-Gar/DJOUSSE-TECH-MD/issues",
+    "site": "https://djousse-tech-md-web.vercel.app",
+    "portfolio": "https://beaute-gar.github.io/Beaute-Gar/",
+    "baileys": "https://github.com/WhiskeySockets/Baileys"
+  },
+  "categories": [
+    {
+      "n": 1,
+      "icon": "🌟",
+      "name": "Général",
+      "count": 16
+    },
+    {
+      "n": 2,
+      "icon": "👥",
+      "name": "Groupe",
+      "count": 21
+    },
+    {
+      "n": 3,
+      "icon": "🛡️",
+      "name": "Protection",
+      "count": 28
+    },
+    {
+      "n": 4,
+      "icon": "🖼️",
+      "name": "Sticker & Media",
+      "count": 16
+    },
+    {
+      "n": 5,
+      "icon": "🧰",
+      "name": "Outils",
+      "count": 18
+    },
+    {
+      "n": 6,
+      "icon": "🤖",
+      "name": "IA",
+      "count": 8
+    },
+    {
+      "n": 7,
+      "icon": "🎲",
+      "name": "Fun",
+      "count": 25
+    },
+    {
+      "n": 8,
+      "icon": "🔍",
+      "name": "Recherche",
+      "count": 13
+    },
+    {
+      "n": 9,
+      "icon": "👑",
+      "name": "Owner",
+      "count": 21
+    },
+    {
+      "n": 10,
+      "icon": "📦",
+      "name": "Divers",
+      "count": 10
+    },
+    {
+      "n": 11,
+      "icon": "⬇️",
+      "name": "Téléchargement",
+      "count": 15
+    },
+    {
+      "n": 12,
+      "icon": "🎮",
+      "name": "Jeux",
+      "count": 5
+    }
+  ],
+  "guard": [
+    {
+      "n": 1,
+      "id": "antilink",
+      "effect": "Liens interdits (whitelist de domaines)"
+    },
+    {
+      "n": 2,
+      "id": "antibad",
+      "effect": "Mots interdits"
+    },
+    {
+      "n": 3,
+      "id": "antitag",
+      "effect": "Mentions abusives"
+    },
+    {
+      "n": 4,
+      "id": "antispam",
+      "effect": "Rafale de messages"
+    },
+    {
+      "n": 5,
+      "id": "antiflood",
+      "effect": "Flood configurable"
+    },
+    {
+      "n": 6,
+      "id": "antimedia",
+      "effect": "Médias non sollicités"
+    },
+    {
+      "n": 7,
+      "id": "antisticker",
+      "effect": "Stickers en masse"
+    },
+    {
+      "n": 8,
+      "id": "antivoice",
+      "effect": "Vocaux non sollicités"
+    },
+    {
+      "n": 9,
+      "id": "antistatus",
+      "effect": "Mention de statut"
+    },
+    {
+      "n": 10,
+      "id": "antiforward",
+      "effect": "Transferts"
+    },
+    {
+      "n": 11,
+      "id": "antivirtex",
+      "effect": "Message géant / corruption"
+    },
+    {
+      "n": 12,
+      "id": "anticontact",
+      "effect": "Envoi de contacts"
+    },
+    {
+      "n": 13,
+      "id": "antipoll",
+      "effect": "Sondages intempestifs"
+    }
+  ],
+  "modes": [
+    {
+      "name": "Baileys",
+      "scope": "Groupes et commandes complètes",
+      "risk": "Risque normal lié à l’usage de Baileys; aucune garantie d’absence de restriction."
+    },
+    {
+      "name": "Agent officiel",
+      "scope": "Créateur de l’agent uniquement; limites fixées par WhatsApp",
+      "risk": "Canal officiel annoncé sans risque de bannissement uniquement pour le créateur de l’agent."
+    },
+    {
+      "name": "Hybride",
+      "scope": "Agent officiel personnel et Baileys à côté, avec deux identités",
+      "risk": "Le canal Baileys conserve son risque normal; les limites officielles ne sont pas étendues."
+    }
+  ],
+  "features": {
+    "pillars": [
+      {
+        "icon": "🧠",
+        "title": "Un seul cerveau",
+        "text": "handler.js centralise toutes les commandes; index.js ne fait que la connexion."
+      },
+      {
+        "icon": "🛡️",
+        "title": "DJOUSSE GUARD",
+        "text": "Un moteur de protections de groupe isolé dans guard/ et évalué par priorité."
+      },
+      {
+        "icon": "⌨️",
+        "title": "Zéro bouton natif",
+        "text": "100 % messages texte et menu par chiffres, y compris sur les anciens clients."
+      }
+    ],
+    "ai": [
+      {
+        "command": ".ai",
+        "text": "Conversation avec Gemini; repli OpenRouter lorsque configuré."
+      },
+      {
+        "command": ".vision",
+        "text": "Analyse d’une image avec l’IA."
+      },
+      {
+        "command": ".transcribe",
+        "text": "Transcription d’un message vocal en texte."
+      },
+      {
+        "command": ".summarize",
+        "text": "Résumé d’un texte long."
+      }
+    ],
+    "media": [
+      "Image ou vidéo vers sticker avec .sticker; retour en image avec .toimg, en audio avec .toaudio.",
+      "Média en vue unique récupéré avec .vv; albums et redimensionnement.",
+      "Recherche YouTube avec .yts, musique MP3 avec .play, vidéo MP4 avec .ytmp4."
+    ]
+  },
+  "attribution": "Créé par Djousse Uriel"
+}

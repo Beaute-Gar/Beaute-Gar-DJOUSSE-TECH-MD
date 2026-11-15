@@ -1,0 +1,21 @@
+'use strict';
+const style = require('../../config/style');
+const { isGroup, getGroupMeta } = require('../../lib/helpers');
+const { phoneOf, pretty } = require('../../lib/phone');
+
+module.exports = {
+  name: 'tagall',
+  aliases: ['everyone'],
+  category: 'groupe',
+  description: 'Mentionne tous les membres',
+  async execute(sock, m, from, args) {
+    if (!isGroup(from)) return sock.sendMessage(from, { text: style.renderError(['Réservé aux groupes.']) });
+    const meta = await getGroupMeta(sock, from);
+    if (!meta || !Array.isArray(meta.participants)) return sock.sendMessage(from, { text: style.renderError(['Impossible de récupérer les membres.']) });
+    const reason = args.join(' ') || 'Annonce';
+    const mentions = meta.participants.map(p => p.id).filter(Boolean);
+    const lines = meta.participants.map(p => `• ${pretty(phoneOf(sock, meta, p.id, p.phoneNumber, p.pn, p.lid) || p.id)}`);
+    const text = [style.listHeader('TAG ALL'), `• ${reason}`, '•', ...lines, style.frameFooter()].join('\n');
+    await sock.sendMessage(from, { text, mentions });
+  }
+};

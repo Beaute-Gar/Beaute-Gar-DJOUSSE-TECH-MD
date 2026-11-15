@@ -1,0 +1,55 @@
+# Dépendances
+node_modules/
+
+# Sessions et données sensibles WhatsApp
+sessions/
+storage/sessions/
+**/creds.json
+**/app-state-sync-*.json
+**/pre-key-*.json
+**/sender-key-*.json
+**/session-*.json
+
+# Environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Données locales / runtime
+storage/database/
+storage/downloads/
+storage/antidelete/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Vercel / déploiement local
+.vercel/
+storage/database/saved_numbers.json*
+storage/database/*.corrompu-*
+
+# Backend local
+backend/.env
+backend/logs/
+backend/node_modules/
+
+# Outils / téléchargements locaux
+tools/
+C:/Tools/
+
+# Déploiement (sauvegardes pare-feu/ssh générées)
+deploy/firewall-backup-*.wfw
+deploy/*.bak.*
+**/*.bak.*
+
+# ngrok (token jamais dans le dépôt)
+.ngrok2/

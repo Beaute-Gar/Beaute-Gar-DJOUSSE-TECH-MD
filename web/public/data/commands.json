@@ -1,0 +1,2003 @@
+{
+  "generatedFrom": "src/commandes",
+  "registry": 196,
+  "aliases": 136,
+  "categories": 12,
+  "partial": false,
+  "commands": [
+    {
+      "name": "alive",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Vérifie que le bot est en ligne"
+    },
+    {
+      "name": "device",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Infos sur l’appareil"
+    },
+    {
+      "name": "getid",
+      "aliases": [
+        "id"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche les numéros (sans JID)"
+    },
+    {
+      "name": "helpx",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Aide détaillée sur une commande"
+    },
+    {
+      "name": "info",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Informations du bot"
+    },
+    {
+      "name": "menu",
+      "aliases": [
+        "aide",
+        "help"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche le menu des commandes"
+    },
+    {
+      "name": "owner",
+      "aliases": [
+        "proprio"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Contact du propriétaire"
+    },
+    {
+      "name": "ping",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Teste la latence du bot"
+    },
+    {
+      "name": "profil",
+      "aliases": [
+        "fiche",
+        "profile"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Affiche la fiche d’un membre"
+    },
+    {
+      "name": "runtime",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Durée de vie du processus Node"
+    },
+    {
+      "name": "social",
+      "aliases": [
+        "links"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Réseaux sociaux"
+    },
+    {
+      "name": "source",
+      "aliases": [
+        "repo"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Code source du bot"
+    },
+    {
+      "name": "status",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "État de la connexion"
+    },
+    {
+      "name": "statut",
+      "aliases": [
+        "autostatus",
+        "autostatut",
+        "status"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Active/désactive la lecture et la réaction automatiques aux statuts. Usage : .statut on | .statut off"
+    },
+    {
+      "name": "story",
+      "aliases": [
+        "poststatus",
+        "poststory",
+        "statuspost"
+      ],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Publier un statut (texte, ou répondre à une image/vidéo)"
+    },
+    {
+      "name": "uptime",
+      "aliases": [],
+      "category": 1,
+      "categorySlug": "general",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Temps de fonctionnement"
+    },
+    {
+      "name": "admins",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Liste les admins du groupe"
+    },
+    {
+      "name": "demote",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Rétrograde un admin"
+    },
+    {
+      "name": "getjid",
+      "aliases": [
+        "jid",
+        "numero-cible"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche le numéro d’un membre (sans JID)"
+    },
+    {
+      "name": "groupinfo",
+      "aliases": [
+        "gcinfo"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Informations sur le groupe"
+    },
+    {
+      "name": "hidetag",
+      "aliases": [
+        "htag"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Mention invisible de tous les membres"
+    },
+    {
+      "name": "kick",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Expulse un membre du groupe"
+    },
+    {
+      "name": "leave",
+      "aliases": [
+        "quitter"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Fait quitter le bot du groupe"
+    },
+    {
+      "name": "link",
+      "aliases": [
+        "gclink"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Obtient le lien du groupe"
+    },
+    {
+      "name": "members",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Liste les membres du groupe"
+    },
+    {
+      "name": "mute",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Rend le groupe muet (admins uniquement)"
+    },
+    {
+      "name": "num",
+      "aliases": [
+        "contacts",
+        "numeros"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Collecte les numéros (groupe ou discussion) et les mémorise. Options : count, clear"
+    },
+    {
+      "name": "pin",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Épingle un message (répondre au message)"
+    },
+    {
+      "name": "poll",
+      "aliases": [
+        "sondage"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Crée un sondage"
+    },
+    {
+      "name": "promote",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Promeut un membre admin"
+    },
+    {
+      "name": "revoke",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Réinitialise le lien du groupe"
+    },
+    {
+      "name": "setdesc",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Change la description du groupe"
+    },
+    {
+      "name": "setname",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Change le nom du groupe"
+    },
+    {
+      "name": "tagadmin",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Mentionne les admins"
+    },
+    {
+      "name": "tagall",
+      "aliases": [
+        "everyone"
+      ],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Mentionne tous les membres"
+    },
+    {
+      "name": "unmute",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Rétablit la parole dans le groupe"
+    },
+    {
+      "name": "unpin",
+      "aliases": [],
+      "category": 2,
+      "categorySlug": "groupe",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Désépingle le message courant"
+    },
+    {
+      "name": "addword",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Ajoute un mot à la liste interdite"
+    },
+    {
+      "name": "antibadword",
+      "aliases": [
+        "antibadwords"
+      ],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le filtre de mots interdits"
+    },
+    {
+      "name": "antibot",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des messages de bots (on/off)"
+    },
+    {
+      "name": "anticontact",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des cartes de visite (on/off)"
+    },
+    {
+      "name": "antidelete",
+      "aliases": [
+        "antidel",
+        "antisupp"
+      ],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Restitue les messages supprimés ou modifiés avec le numéro de l’auteur"
+    },
+    {
+      "name": "antidocument",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des documents PDF/DOCX (on/off)"
+    },
+    {
+      "name": "antiflood",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive l’anti-flood"
+    },
+    {
+      "name": "antiforward",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des messages transférés (on/off)"
+    },
+    {
+      "name": "antilink",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive l’anti-lien (on/off)"
+    },
+    {
+      "name": "antilive",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des invitations aux lives (on/off)"
+    },
+    {
+      "name": "antimedia",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive l’anti-média (on/off)"
+    },
+    {
+      "name": "antipoll",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des sondages (on/off)"
+    },
+    {
+      "name": "antispam",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive l’anti-spam (on/off)"
+    },
+    {
+      "name": "antistatus",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des statuts de groupe (on/off)"
+    },
+    {
+      "name": "antisticker",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive l’anti-sticker (on/off)"
+    },
+    {
+      "name": "antitag",
+      "aliases": [
+        "antigroupmention"
+      ],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive l’anti-tag (on/off)"
+    },
+    {
+      "name": "antivirtex",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive l’anti-virtex"
+    },
+    {
+      "name": "antivoice",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active/désactive le blocage des notes vocales (on/off)"
+    },
+    {
+      "name": "blacklist",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Ajoute un membre à la blacklist (sans cible : affiche la liste)"
+    },
+    {
+      "name": "numero",
+      "aliases": [
+        "num",
+        "whois"
+      ],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche le numéro de téléphone d’un membre (mention ou réponse)"
+    },
+    {
+      "name": "protection",
+      "aliases": [
+        "secu",
+        "securite"
+      ],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Active toutes les protections du groupe (ou affiche leur état)"
+    },
+    {
+      "name": "removeword",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Retire un mot de la liste interdite"
+    },
+    {
+      "name": "resetwarn",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Réinitialise les avertissements d’un membre"
+    },
+    {
+      "name": "scamcheck",
+      "aliases": [
+        "scanurl"
+      ],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Analyse un lien suspect"
+    },
+    {
+      "name": "warn",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Avertit un membre"
+    },
+    {
+      "name": "warnings",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche les avertissements d’un membre"
+    },
+    {
+      "name": "warnlimit",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Définit la limite d’avertissements avant expulsion"
+    },
+    {
+      "name": "whitelist",
+      "aliases": [],
+      "category": 3,
+      "categorySlug": "protection",
+      "access": "admin",
+      "accessConfirmed": true,
+      "description": "Retire un membre de la blacklist"
+    },
+    {
+      "name": "blur",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Floute une image"
+    },
+    {
+      "name": "emojimix",
+      "aliases": [
+        "mixemoji"
+      ],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Mix deux emojis"
+    },
+    {
+      "name": "readqr",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Lit un QR code depuis une image"
+    },
+    {
+      "name": "remini",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Améliore la qualité d’une image (simulation)"
+    },
+    {
+      "name": "removebg",
+      "aliases": [
+        "detourer",
+        "remove-bg"
+      ],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Supprime le fond d’une image (Remove.bg)"
+    },
+    {
+      "name": "steal",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Vole un sticker (alias de take)"
+    },
+    {
+      "name": "sticker",
+      "aliases": [
+        "s",
+        "stiker"
+      ],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Convertit une image, un GIF ou une vidéo en sticker"
+    },
+    {
+      "name": "take",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Prend un sticker et change son auteur"
+    },
+    {
+      "name": "toaudio",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Convertit une vidéo en audio"
+    },
+    {
+      "name": "toimg",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Convertit un sticker en image"
+    },
+    {
+      "name": "tourl",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère un lien pour un média (simulation locale)"
+    },
+    {
+      "name": "tovideo",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Convertit un sticker animé en vidéo"
+    },
+    {
+      "name": "toviewonce",
+      "aliases": [
+        "ephemere",
+        "vo"
+      ],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Transforme un média en message vue unique"
+    },
+    {
+      "name": "voice",
+      "aliases": [
+        "say",
+        "tts"
+      ],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Transforme un texte en vocal (ElevenLabs)"
+    },
+    {
+      "name": "vv",
+      "aliases": [
+        "viewonce"
+      ],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Récupère une photo, vidéo ou audio en vue unique"
+    },
+    {
+      "name": "wallpaper",
+      "aliases": [],
+      "category": 4,
+      "categorySlug": "sticker-media",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Récupère un fond d’écran aléatoire"
+    },
+    {
+      "name": "base64",
+      "aliases": [],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Encode ou décode en base64 (ex: .base64 encode texte)"
+    },
+    {
+      "name": "binary",
+      "aliases": [
+        "bin"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Convertit un texte en binaire"
+    },
+    {
+      "name": "calc",
+      "aliases": [
+        "math"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Calculatrice (ex: .calc 2+2)"
+    },
+    {
+      "name": "countdown",
+      "aliases": [],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Compte à rebours (ex: .countdown 10)"
+    },
+    {
+      "name": "date",
+      "aliases": [],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche la date actuelle"
+    },
+    {
+      "name": "md5",
+      "aliases": [],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Calcule le hash MD5 d’un texte"
+    },
+    {
+      "name": "qr",
+      "aliases": [],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère un QR code à partir d’un texte"
+    },
+    {
+      "name": "random",
+      "aliases": [
+        "rand"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère un nombre aléatoire (ex: .random 1 100)"
+    },
+    {
+      "name": "sha1",
+      "aliases": [],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Calcule le hash SHA1 d’un texte"
+    },
+    {
+      "name": "shorten",
+      "aliases": [
+        "raccourcir",
+        "short",
+        "tiny"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Raccourcit une URL. Usage : .shorten <url>"
+    },
+    {
+      "name": "ssweb",
+      "aliases": [
+        "capture",
+        "screenshot",
+        "ss"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Capture d’écran d’un site web. Usage : .ssweb <url>"
+    },
+    {
+      "name": "stopwatch",
+      "aliases": [
+        "chrono"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Chronomètre simple"
+    },
+    {
+      "name": "time",
+      "aliases": [
+        "heure"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche l’heure actuelle"
+    },
+    {
+      "name": "timer",
+      "aliases": [
+        "minuteur"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Programme un rappel (ex: .timer 5m)"
+    },
+    {
+      "name": "translate",
+      "aliases": [
+        "tr"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Traduit un texte (ex: .tr fr en Bonjour)"
+    },
+    {
+      "name": "tts",
+      "aliases": [
+        "dire",
+        "speak",
+        "voix"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Convertit un texte en voix (audio). Usage : .tts [lang] <texte>"
+    },
+    {
+      "name": "uuid",
+      "aliases": [],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère un identifiant unique UUID v4"
+    },
+    {
+      "name": "weather",
+      "aliases": [
+        "meteo"
+      ],
+      "category": 5,
+      "categorySlug": "outils",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche la météo d’une ville (ex: .weather Paris)"
+    },
+    {
+      "name": "ai",
+      "aliases": [
+        "chat",
+        "gpt"
+      ],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Pose une question à l’IA (Gemini/Groq/OpenRouter)"
+    },
+    {
+      "name": "analyze",
+      "aliases": [
+        "analyse"
+      ],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Analyse un texte avec l’IA"
+    },
+    {
+      "name": "gpt",
+      "aliases": [],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Alias de la commande .ai"
+    },
+    {
+      "name": "gpt4",
+      "aliases": [],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Alias de la commande .ai"
+    },
+    {
+      "name": "imagine",
+      "aliases": [
+        "dalle"
+      ],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère une image avec l’IA (sans clé API)"
+    },
+    {
+      "name": "summarize",
+      "aliases": [],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Résume un texte long avec l’IA"
+    },
+    {
+      "name": "transcribe",
+      "aliases": [
+        "stt"
+      ],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Transcrit un audio en texte"
+    },
+    {
+      "name": "vision",
+      "aliases": [],
+      "category": 6,
+      "categorySlug": "ia",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Analyse une image avec l’IA"
+    },
+    {
+      "name": "8ball",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Pose une question à la boule magique"
+    },
+    {
+      "name": "anime",
+      "aliases": [
+        "neko",
+        "waifu"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Image anime aléatoire (SFW). Usage : .anime [type]"
+    },
+    {
+      "name": "choose",
+      "aliases": [
+        "choisir"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Choisit une option au hasard"
+    },
+    {
+      "name": "coin",
+      "aliases": [
+        "pile"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Lance une pièce (Pile ou Face)"
+    },
+    {
+      "name": "compliment",
+      "aliases": [
+        "complimente"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Fait un compliment aléatoire"
+    },
+    {
+      "name": "dice",
+      "aliases": [
+        "de"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Lance un dé à 6 faces"
+    },
+    {
+      "name": "ephoto",
+      "aliases": [
+        "effet",
+        "fx",
+        "texteffect"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Effet texte sur image (ephoto360). Usage : .ephoto <effet> <texte>"
+    },
+    {
+      "name": "fact",
+      "aliases": [
+        "funfact"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Anecdote intéressante (API gratuite)"
+    },
+    {
+      "name": "gaytest",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Test humoristique"
+    },
+    {
+      "name": "horoscope",
+      "aliases": [
+        "horo"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Horoscope du jour"
+    },
+    {
+      "name": "insult",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Insulte humoristique (léger)"
+    },
+    {
+      "name": "iq",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Test de QI humoristique"
+    },
+    {
+      "name": "joke",
+      "aliases": [
+        "blague"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Raconte une blague aléatoire (JokeAPI - gratuit)"
+    },
+    {
+      "name": "meme",
+      "aliases": [
+        "memegen"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère un mème (aléatoire ou personnalisé via memegen.link)"
+    },
+    {
+      "name": "neverhaveiever",
+      "aliases": [
+        "nhie"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Je n’ai jamais..."
+    },
+    {
+      "name": "poem",
+      "aliases": [
+        "poeme"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère un court poème"
+    },
+    {
+      "name": "quote",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Citation inspirante"
+    },
+    {
+      "name": "rate",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Note quelque chose sur 10"
+    },
+    {
+      "name": "riddle",
+      "aliases": [
+        "devinette"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Devinette amusante"
+    },
+    {
+      "name": "roast",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Roast humoristique"
+    },
+    {
+      "name": "roll",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Lance un dé avec un nombre de faces personnalisé (ex: .roll 20)"
+    },
+    {
+      "name": "ship",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Calcule la compatibilité entre deux personnes"
+    },
+    {
+      "name": "thisorthat",
+      "aliases": [
+        "tst"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Choix entre deux options"
+    },
+    {
+      "name": "wouldyou",
+      "aliases": [],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Question \"Tu préfères...\""
+    },
+    {
+      "name": "zodiac",
+      "aliases": [
+        "zodiaque"
+      ],
+      "category": 7,
+      "categorySlug": "fun",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Donne ton signe du zodiaque (ex: .zodiac 15 08)"
+    },
+    {
+      "name": "domain",
+      "aliases": [
+        "whois"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche des informations RDAP sur un nom de domaine"
+    },
+    {
+      "name": "film",
+      "aliases": [
+        "imdb",
+        "movie"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Infos d’un film ou d’une série (OMDb)"
+    },
+    {
+      "name": "football",
+      "aliases": [
+        "foot",
+        "match",
+        "soccer"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Infos football (équipe, prochain/dernier match, classement). Usage : .football <équipe> | .football classement <ligue>"
+    },
+    {
+      "name": "github",
+      "aliases": [
+        "gh"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche un utilisateur GitHub"
+    },
+    {
+      "name": "google",
+      "aliases": [
+        "search"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche Google avec résultats (Serper)"
+    },
+    {
+      "name": "igstalk",
+      "aliases": [],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche un profil Instagram (simulation)"
+    },
+    {
+      "name": "news",
+      "aliases": [
+        "actu"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Dernières actualités (GNews, repli RSS)"
+    },
+    {
+      "name": "npm",
+      "aliases": [],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche un package NPM"
+    },
+    {
+      "name": "pinterest",
+      "aliases": [],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche une image Pinterest"
+    },
+    {
+      "name": "promo",
+      "aliases": [
+        "cotes",
+        "odds",
+        "prono",
+        "pronos",
+        "pronostic",
+        "pronostics",
+        "tips"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Pronostics et cotes des matchs de football du jour"
+    },
+    {
+      "name": "wiki",
+      "aliases": [
+        "wikipedia"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche un article sur Wikipedia"
+    },
+    {
+      "name": "wikipedia",
+      "aliases": [],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Alias de la commande .wiki"
+    },
+    {
+      "name": "yts",
+      "aliases": [
+        "ytsearch"
+      ],
+      "category": 8,
+      "categorySlug": "recherche",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche des vidéos YouTube"
+    },
+    {
+      "name": "autoreact",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Active/désactive la réaction automatique (✅/❌) aux commandes"
+    },
+    {
+      "name": "autoread",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Active/désactive la lecture automatique"
+    },
+    {
+      "name": "autoview",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Active/désactive la vue automatique des messages vue unique"
+    },
+    {
+      "name": "block",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Bloque un contact"
+    },
+    {
+      "name": "broadcast",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Envoie un message à tous les groupes ou le bot est présent"
+    },
+    {
+      "name": "eval",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Évalue du code JavaScript (danger)"
+    },
+    {
+      "name": "exec",
+      "aliases": [
+        "shell"
+      ],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Exécute une commande système (danger)"
+    },
+    {
+      "name": "health",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Santé du bot (mémoire, uptime, sessions)"
+    },
+    {
+      "name": "public",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Rend le bot public (tout le monde peut l’utiliser)"
+    },
+    {
+      "name": "reload",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Recharge les commandes sans redémarrer le bot"
+    },
+    {
+      "name": "restart",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Redémarre le bot"
+    },
+    {
+      "name": "self",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Rend le bot privé (seul le propriétaire peut l’utiliser)"
+    },
+    {
+      "name": "sessions",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Liste les sessions et leur état"
+    },
+    {
+      "name": "setbio",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Change la bio du bot"
+    },
+    {
+      "name": "setbotname",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Change le nom du bot"
+    },
+    {
+      "name": "setowner",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Change le propriétaire du bot"
+    },
+    {
+      "name": "setpp",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Change la photo de profil du bot"
+    },
+    {
+      "name": "setprefix",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Change le préfixe du bot"
+    },
+    {
+      "name": "setstatus",
+      "aliases": [
+        "poststatus"
+      ],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Poste un statut WhatsApp"
+    },
+    {
+      "name": "shutdown",
+      "aliases": [
+        "stop"
+      ],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Éteint le bot"
+    },
+    {
+      "name": "unblock",
+      "aliases": [],
+      "category": 9,
+      "categorySlug": "owner",
+      "access": "owner",
+      "accessConfirmed": true,
+      "description": "Débloque un contact"
+    },
+    {
+      "name": "afk",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Active le mode AFK (Away From Keyboard)"
+    },
+    {
+      "name": "backup",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Envoie une sauvegarde de la base de données"
+    },
+    {
+      "name": "bookmark",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Sauvegarde un message (répondre au message)"
+    },
+    {
+      "name": "note",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche ou supprime des notes"
+    },
+    {
+      "name": "pastebin",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Génère un lien pour partager du texte (via dpaste.org)"
+    },
+    {
+      "name": "remind",
+      "aliases": [
+        "rappel"
+      ],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Programme un rappel persistant (ex: .remind 10m Boire de l’eau)"
+    },
+    {
+      "name": "report",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Signale un bug ou un problème au propriétaire"
+    },
+    {
+      "name": "save",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Sauvegarde du texte dans une note"
+    },
+    {
+      "name": "stats",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Affiche les statistiques du bot"
+    },
+    {
+      "name": "todo",
+      "aliases": [],
+      "category": 10,
+      "categorySlug": "divers",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Gère une liste de tâches (add/list/del)"
+    },
+    {
+      "name": "apk",
+      "aliases": [],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche et télécharge une application APK (Aptoide)"
+    },
+    {
+      "name": "facebook",
+      "aliases": [
+        "fb"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge une vidéo Facebook"
+    },
+    {
+      "name": "gdrive",
+      "aliases": [],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge un fichier Google Drive"
+    },
+    {
+      "name": "gitclone",
+      "aliases": [],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge un dépôt GitHub en ZIP"
+    },
+    {
+      "name": "instagram",
+      "aliases": [
+        "ig"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge un média Instagram"
+    },
+    {
+      "name": "lyrics",
+      "aliases": [
+        "paroles"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche les paroles d’une chanson"
+    },
+    {
+      "name": "mediafire",
+      "aliases": [
+        "mf"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge un fichier MediaFire"
+    },
+    {
+      "name": "play",
+      "aliases": [
+        "musique",
+        "song"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Recherche et télécharge de la musique (YouTube)"
+    },
+    {
+      "name": "shazam",
+      "aliases": [],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Identifie une musique depuis un audio (fonctionnalité limitée)"
+    },
+    {
+      "name": "soundcloud",
+      "aliases": [
+        "sc"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge depuis SoundCloud"
+    },
+    {
+      "name": "spotify",
+      "aliases": [],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge une piste Spotify (lien ou recherche)"
+    },
+    {
+      "name": "tiktok",
+      "aliases": [
+        "tt"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge une vidéo TikTok (sans filigrane)"
+    },
+    {
+      "name": "twitter",
+      "aliases": [
+        "x"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge un média Twitter/X"
+    },
+    {
+      "name": "ytmp3",
+      "aliases": [
+        "ytaudio"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge l’audio d’une vidéo YouTube"
+    },
+    {
+      "name": "ytmp4",
+      "aliases": [
+        "ytvideo"
+      ],
+      "category": 11,
+      "categorySlug": "telechargement",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Télécharge une vidéo YouTube"
+    },
+    {
+      "name": "actionverite",
+      "aliases": [
+        "dare",
+        "defi",
+        "défi",
+        "jouer",
+        "start",
+        "startgame",
+        "stop",
+        "stopgame",
+        "truth"
+      ],
+      "category": 12,
+      "categorySlug": "jeux",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Action ou Vérité : jeu de groupe"
+    },
+    {
+      "name": "lg",
+      "aliases": [
+        "loup-garou",
+        "loupgarou",
+        "loups",
+        "vote",
+        "voter"
+      ],
+      "category": 12,
+      "categorySlug": "jeux",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Loup-Garou : jeu de rôles en groupe"
+    },
+    {
+      "name": "modenuit",
+      "aliases": [
+        "nightmode",
+        "nuit"
+      ],
+      "category": 12,
+      "categorySlug": "jeux",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Mode nuit : ferme/rouvre le groupe à une heure fixe"
+    },
+    {
+      "name": "quiz",
+      "aliases": [
+        "classementquiz",
+        "quizcat",
+        "quizcategories",
+        "quizscore",
+        "quizscores",
+        "quizstop",
+        "quizz",
+        "startquiz",
+        "stopquiz",
+        "topquiz"
+      ],
+      "category": 12,
+      "categorySlug": "jeux",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Quiz en direct : questions, points, classement"
+    },
+    {
+      "name": "tictactoe",
+      "aliases": [
+        "morpion",
+        "ttt"
+      ],
+      "category": 12,
+      "categorySlug": "jeux",
+      "access": "public",
+      "accessConfirmed": true,
+      "description": "Morpion à 2 joueurs. Usage : .ttt @joueur"
+    }
+  ]
+}
