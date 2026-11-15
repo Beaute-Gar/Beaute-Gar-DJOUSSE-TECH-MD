@@ -1,21 +1,13 @@
-# ngrok.yml — configuration du tunnel (compte gratuit, domaine fixe)
-# 1) Installer ngrok et ajouter le token (JAMAIS dans le dépôt):
-#      ngrok config add-authtoken <TOKEN>
-#    ou via variable d'environnement NGROK_AUTHTOKEN.
-# 2) Lancer: ngrok start --config=ngrok.yml backend
-# Le backend doit écouter sur 127.0.0.1:[PORT] (défaut 3001).
+# ngrok.yml — configuration du tunnel (domaine fixe)
+# Authtoken déjà enregistré en local via: ngrok config add-authtoken <TOKEN>
+# Lancer: ngrok start --config=ngrok.yml backend
+# Le backend doit écouter sur 127.0.0.1:3001.
 
-version: "3"
-agent:
-  authtoken: ${NGROK_AUTHTOKEN}
-  log: stdout
-  log_level: info
-
+version: "2"
 tunnels:
   backend:
     proto: http
     addr: 127.0.0.1:3001
     domain: renitent-gennie-moonishly.ngrok-free.dev
-    inspect: false
-    # Compte gratuit: domaine fixe unique inclus. Vérifier dans le dashboard les limites de session/trafic.
+    # Compte gratuit: domaine fixe inclus. Vérifier dans le dashboard les limites de session/trafic.
     # Le front doit envoyer l'en-tête: ngrok-skip-browser-warning: 1
