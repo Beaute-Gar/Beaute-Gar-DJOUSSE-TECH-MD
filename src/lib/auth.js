@@ -117,4 +117,4 @@ async function askPhoneNumber(config, style) {
   process.exit(1);
 }
 
-module.exports = { askPhoneNumber, isOwner, getBotNumber, getOwnerNumber, normalizeNumber, getConnectedOwners, setConnectedOwners, addConnectedOwner, removeConnectedOwner };
+module.exports = { askPhoneNumber, isOwner, getBotNumber, getOwnerNumber, normalizeNumber, senderCandidates, getConnectedOwners, setConnectedOwners, addConnectedOwner, removeConnectedOwner };

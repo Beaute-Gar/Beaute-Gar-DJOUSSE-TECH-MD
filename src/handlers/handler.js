@@ -50,12 +50,37 @@ async function handleMessage(sock, m) {
   );
   const memberSelfNoCmd = currentMode === 'self' && !isOwnerMsg && !(isGameCommand || hasActiveGame);
 
-  // 2. --- UN SEUL BOT PAR GROUPE ---
-  // Si plusieurs comptes du bot sont dans le meme groupe, une seule session
-  // doit traiter les messages. Les autres ignorent totalement le groupe.
+  // 2. --- ROUTAGE GROUPE / MULTI-SESSION ---
+  // Objectif : une commande tapée par une session connectée (admin/propriétaire)
+  // doit être exécutée et répondre depuis CETTE session. Les messages des autres
+  // membres restent traités par une seule session pour éviter les doublons
+  // (protections, réponses automatiques).
   if (isGroup(from)) {
-    const verdict = await groupOwner.route(sock, m, from);
-    if (verdict !== 'process') return;
+    const mySession = auth.normalizeNumber(sock.user && sock.user.id) || auth.normalizeNumber(groupOwner.sessionOf(sock));
+    const senderNums = (typeof auth.senderCandidates === 'function')
+      ? auth.senderCandidates(m, m.key.participant || m.key.remoteJid || from)
+      : [auth.normalizeNumber(m.key.participant || m.key.remoteJid || from)].filter(Boolean);
+    const connectedOwners = auth.getConnectedOwners();
+    const senderSession = senderNums.find((n) => connectedOwners.includes(n)) || '';
+    const senderIsConnectedSession = !!senderSession;
+    const isClaimCmd = /^\.\s*claim\b/i.test(text);
+
+    if (senderIsConnectedSession) {
+      // Un message envoyé par une session connectée : seule la session émettrice
+      // le traite (exécution/réponse depuis son compte). Les autres l'ignorent.
+      // Exception : .claim reste géré par le routeur (coordination inter-sessions).
+      if (isClaimCmd) {
+        const verdict = await groupOwner.route(sock, m, from);
+        if (verdict !== 'process') return;
+      } else if (mySession !== senderSession) {
+        return;
+      }
+      // sinon (ma session = émetteur), on continue le traitement ici.
+    } else {
+      // Message d'un membre/non-session : une seule session le traite (anti-doublon).
+      const verdict = await groupOwner.route(sock, m, from);
+      if (verdict !== 'process') return;
+    }
   }
 
   // 3. --- JEU ACTION OU VÉRITÉ (avant les protections et les commandes) ---
