@@ -26,17 +26,16 @@ async function handleMessage(sock, m) {
   const from = m.key.remoteJid;
   if (!from || from === 'status@broadcast') return;
 
-  // 1. --- VERIFICATION DU MODE SELF ---
+  // 1. --- MODE, PROPRIETAIRE ET JEUX ---
   const currentMode = db.getSetting('mode') || 'public';
   // Le numero du bot doit etre celui de CE socket : avec plusieurs sessions,
   // le reglage global "botNumber" est ecrase par la derniere connectee.
   const myRealNumber = normalizeJid(sock.user && sock.user.id) || db.getSetting('botNumber');
   const senderJid = m.key.participant || m.key.remoteJid;
+  const isOwnerMsg = !!(m.key.fromMe || (myRealNumber && String(senderJid).includes(myRealNumber)));
 
-  // En mode self, les messages des membres sont ignores par defaut. On fait
-  // exception pour les jeux de groupe : commandes et reponses doivent pouvoir
-  // etre traites pour que les membres puissent participer (Action ou Verite,
-  // Quiz, Loup-Garou, Mode nuit).
+  // En mode self, les membres peuvent participer aux jeux, mais leurs commandes
+  // ne reçoivent pas de réponse. Les protections doivent quand même s'appliquer.
   const text = extractText(m).trim();
   const isGameCommand = /^\.\s*(jouer|quiz|quizstop|quizscore|quizcat|quizz|startquiz|stopquiz|lg|loupgarou|loup-garou|loups|vote|voter|modenuit|nightmode|nuit|start\s+game|stop\s+game|dare|defi|défi|truth|verite|vérité)\b/i.test(text);
   const hasActiveGame = isGroup(from) && (
@@ -44,14 +43,7 @@ async function handleMessage(sock, m) {
     safeHasGame(require('../jeux/quiz'), from) ||
     safeHasGame(require('../jeux/loupgarou'), from)
   );
-
-  if (currentMode === 'self') {
-    if (!m.key.fromMe && (!myRealNumber || !String(senderJid).includes(myRealNumber))) {
-      if (!(isGameCommand || hasActiveGame)) {
-        return; // Ignore totalement les inconnus
-      }
-    }
-  }
+  const memberSelfNoCmd = currentMode === 'self' && !isOwnerMsg && !(isGameCommand || hasActiveGame);
 
   // 2. --- UN SEUL BOT PAR GROUPE ---
   // Si plusieurs comptes du bot sont dans le meme groupe, une seule session
@@ -78,17 +70,24 @@ async function handleMessage(sock, m) {
   }
 
   // 5. --- PROTECTIONS AUTOMATIQUES ---
+  // En mode self, on analyse aussi les messages des membres (sans leur répondre aux commandes).
   try {
     await handleProtection(sock, m);
   } catch (e) {
     console.error('[PROTECTION ERROR]', e);
   }
 
+  // En mode self, seuls le propriétaire/bot peuvent utiliser les commandes.
+  if (memberSelfNoCmd) return;
+
   // 6. --- EXTRACTION DU TEXTE ET COMMANDES ---
   if (!text || !text.startsWith(config.prefix)) return;
 
   const body = text.slice(config.prefix.length).trim();
   if (!body) return;
+
+  // En mode self, ignorer silencieusement les commandes des non-propriétaires.
+  if (currentMode === 'self' && !isOwnerMsg) return;
 
   const [rawCmd, ...args] = body.split(/\s+/);
   const command = cmdHandler.find(rawCmd);
