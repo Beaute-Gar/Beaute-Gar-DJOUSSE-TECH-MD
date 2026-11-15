@@ -365,18 +365,35 @@ function sendJson(res, status, body) {
   res.end(payload);
 }
 
-function pairingStatus() {
-  let hasWaiting = false;
+function getPairingStats() {
+  let sessions = 0;
+  let active = 0;
+  let waiting = 0;
   for (const [, sock] of activeSockets) {
+    sessions += 1;
     try {
       if (sock && sock.authState && sock.authState.creds && sock.authState.creds.registered) {
-        return 'connected';
+        active += 1;
+      } else if (sock) {
+        waiting += 1;
       }
-      if (sock) hasWaiting = true;
     } catch {}
   }
-  if (hasWaiting) return 'waiting';
-  return 'disconnected';
+  const connected = active > 0;
+  const status = connected ? 'connected' : (waiting > 0 ? 'waiting' : 'disconnected');
+  return {
+    ok: true,
+    online: true,
+    connected,
+    connection: connected ? 'OPEN' : (waiting > 0 ? 'PAIRING' : 'INCONNU'),
+    sessions,
+    active,
+    status
+  };
+}
+
+function pairingStatus() {
+  return getPairingStats().status;
 }
 
 async function waitForPairingSocket(number, timeoutMs = 30000) {
@@ -407,7 +424,7 @@ function startPairingServer() {
       const url = new URL(req.url || '/', 'http://localhost');
 
       if (req.method === 'GET' && (url.pathname === '/health' || url.pathname === '/')) {
-        return sendJson(res, 200, { ok: true, status: 'ok', pairing: pairingStatus() });
+        return sendJson(res, 200, getPairingStats());
       }
 
       if (token && req.headers['x-api-token'] !== token) {
@@ -415,7 +432,7 @@ function startPairingServer() {
       }
 
       if (req.method === 'GET' && url.pathname === '/status') {
-        return sendJson(res, 200, { status: pairingStatus() });
+        return sendJson(res, 200, getPairingStats());
       }
 
       if (req.method === 'POST' && url.pathname === '/pair') {
