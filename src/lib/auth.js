@@ -48,6 +48,25 @@ function getOwnerNumber(config) {
   return fromConfig || fromDb;
 }
 
+function senderCandidates(m, from) {
+  const key = (m && m.key) || {};
+  const list = [
+    key.participant,
+    key.participantPn,
+    key.participantAlt,
+    key.senderPn,
+    m && m.participant,
+    from,
+    key.remoteJid
+  ];
+  const out = [];
+  for (const v of list) {
+    const n = normalizeNumber(v);
+    if (n && !out.includes(n)) out.push(n);
+  }
+  return out;
+}
+
 function isOwner(sock, m, config, from) {
   if (!m || !m.key) return false;
   if (m.key.fromMe) return true;
@@ -55,14 +74,15 @@ function isOwner(sock, m, config, from) {
   const bot = getBotNumber(sock);
   const owner = getOwnerNumber(config);
   const connected = getConnectedOwners();
-  const sender = normalizeNumber(m.key.participant || from || m.key.remoteJid || '');
-  if (!sender) return false;
+  const candidates = senderCandidates(m, from);
+  if (!candidates.length) return false;
 
-  return !!(
-    (bot && sender === bot) ||
-    (owner && sender === owner) ||
-    connected.includes(sender)
-  );
+  for (const sender of candidates) {
+    if ((bot && sender === bot) || (owner && sender === owner) || connected.includes(sender)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 async function askPhoneNumber(config, style) {
