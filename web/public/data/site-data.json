@@ -3,7 +3,7 @@
   "tagline": "Des solutions fiables pour un avenir sans limites",
   "pitch": "Un assistant WhatsApp 100 % texte : modération de groupe, IA, médias et outils, pilotés par un menu à chiffres.",
   "version": "4.0.0",
-  "siteOrigin": "https://djousse-tech-md-web.vercel.app",
+  "siteOrigin": "https://beaute-gar-djousse-tech-md-web.vercel.app",
   "stats": {
     "categories": 12,
     "commands_menu": 196,
@@ -14,7 +14,7 @@
   "links": {
     "github": "https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD",
     "issues": "https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/issues",
-    "site": "https://djousse-tech-md-web.vercel.app",
+    "site": "https://beaute-gar-djousse-tech-md-web.vercel.app",
     "portfolio": "https://beaute-gar.github.io/Beaute-Gar/",
     "baileys": "https://github.com/WhiskeySockets/Baileys"
   },
