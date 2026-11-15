@@ -24,13 +24,140 @@
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
   <link rel="manifest" href="./site.webmanifest">
-  <link rel="icon" href="./assets/icons/favicon-32.png" sizes="32x32" type="image/png">
-  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
-  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="./js/theme-init.js"></script>
   <link rel="stylesheet" href="./css/tokens.css">
   <link rel="stylesheet" href="./css/base.css">
   <link rel="stylesheet" href="./css/components.css">
+  <style>
+    /* Splash Screen DJOUSSE TECH */
+    body.dj-splash-active { overflow: hidden; }
+    #djSplash {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      background: #09090b; color: #e0e0e0;
+      font-family: "Fira Code", monospace;
+      overflow: hidden;
+    }
+    #djSplash::before {
+      content: ""; position: absolute; inset: -20%;
+      background: radial-gradient(circle at center, rgba(0,212,255,0.15) 0%, rgba(179,0,255,0.15) 45%, rgba(0,0,0,0) 70%);
+      filter: blur(40px);
+      animation: djSplashPulse 4s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes djSplashPulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1.1); opacity: 1; }
+    }
+    @keyframes djSplashFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes djSplashTypeLine {
+      from { opacity: 0; transform: translateX(-18px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes djSplashBlink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    .dj-splash-wrap {
+      position: relative; z-index: 1; width: min(560px, calc(100% - 32px));
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+    }
+    .dj-splash-logo {
+      width: 110px; height: 110px; border-radius: 50%; padding: 4px;
+      background: linear-gradient(135deg, #00d4ff, #b300ff);
+      box-shadow: 0 0 28px rgba(0,212,255,0.35), 0 0 46px rgba(179,0,255,0.25);
+      animation: djSplashFloat 3s ease-in-out infinite;
+      flex: 0 0 auto;
+    }
+    .dj-splash-logo img, .dj-splash-logo .dj-splash-avatar {
+      width: 100%; height: 100%; border-radius: 50%; display: block; object-fit: cover; background: #111;
+    }
+    .dj-splash-avatar {
+      display: grid; place-items: center; color: #00d4ff; font-size: 2rem; font-weight: 700;
+      background: radial-gradient(circle at 30% 30%, #1a1f2b, #09090b);
+    }
+    .dj-splash-box {
+      position: relative; width: 100%;
+      background: rgba(20, 20, 25, 0.85);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      padding: 52px 22px 46px;
+    }
+    .dj-splash-box::before,
+    .dj-splash-box::after {
+      position: absolute; left: 14px; right: 14px;
+      color: #00d4ff; font-weight: 700; font-size: 0.92rem;
+      letter-spacing: 0.02em; white-space: nowrap; overflow: hidden;
+      font-family: "Fira Code", monospace; pointer-events: none;
+    }
+    .dj-splash-box::before { content: "╭┄┄『 𝙳𝙹𝙾𝚄𝚂𝚂𝙴 𝚃𝙴𝙲𝙷 』┄❍"; top: 14px; }
+    .dj-splash-box::after { content: "╰┄┄┄┄┄┄┄┄┄┄┄┄⪼"; bottom: 14px; }
+    .dj-splash-lines { display: grid; gap: 8px; margin-top: 6px; }
+    .dj-splash-line {
+      color: #808080; font-size: 0.95rem; line-height: 1.5;
+      opacity: 0; transform: translateX(-18px);
+      animation: djSplashTypeLine 0.55s ease forwards;
+    }
+    .dj-splash-line:nth-child(1) { animation-delay: 0.5s; }
+    .dj-splash-line:nth-child(2) { animation-delay: 1.2s; }
+    .dj-splash-line:nth-child(3) { animation-delay: 1.9s; }
+    .dj-splash-line:nth-child(4) { animation-delay: 2.6s; }
+    .dj-splash-line:nth-child(5) { animation-delay: 3.3s; color: #e0e0e0; }
+    .dj-splash-cursor {
+      display: inline-block; width: 9px; height: 1.05em; margin-left: 4px;
+      background: #00d4ff; vertical-align: -0.15em;
+      animation: djSplashBlink 1s steps(1, end) infinite;
+    }
+    .dj-splash-progress {
+      width: 100%; height: 10px; border-radius: 999px; overflow: hidden;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+      margin-top: 6px;
+    }
+    .dj-splash-progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #00d4ff, #b300ff);
+      border-radius: inherit; transition: width 0.25s ease;
+    }
+    .dj-splash-percent { color: #00d4ff; font-size: 0.95rem; font-weight: 600; margin-top: 4px; }
+    .dj-splash-screen { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .dj-splash-screen[hidden] { display: none !important; }
+    .dj-splash-welcome {
+      width: 100%; text-align: center; padding: 40px 10px 10px;
+      opacity: 0; transition: opacity 0.6s ease;
+    }
+    .dj-splash-welcome.is-visible { opacity: 1; }
+    .dj-splash-title {
+      margin: 0 0 10px; font-size: clamp(2rem, 8vw, 3.2rem); font-weight: 700; letter-spacing: 0.08em;
+      background: linear-gradient(90deg, #00d4ff, #b300ff);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .dj-splash-subtitle { margin: 0 0 24px; color: #808080; font-size: 1rem; }
+    .dj-splash-enter {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 160px; min-height: 48px; padding: 12px 22px;
+      border: 1px solid #00d4ff; border-radius: 8px;
+      color: #00d4ff; background: transparent;
+      font-family: "Fira Code", monospace; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .dj-splash-enter:hover { background: #00d4ff; color: #000; box-shadow: 0 0 24px rgba(0,212,255,0.35); }
+    #djSplash.dj-splash-fadeout { opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
+    #djSiteRoot { opacity: 0; transition: opacity 0.6s ease; }
+    #djSiteRoot.is-visible { opacity: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      #djSplash::before, .dj-splash-logo, .dj-splash-line, .dj-splash-cursor { animation: none !important; }
+      .dj-splash-line { opacity: 1; transform: none; }
+      #djSplash, #djSplash.dj-splash-fadeout, #djSiteRoot, .dj-splash-welcome { transition: none !important; }
+    }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -64,7 +191,35 @@
   <script src="./js/config.js"></script>
   <script type="module" src="./js/main.js"></script>
 </head>
-<body>
+<body class="dj-splash-active">
+  <div id="djSplash" aria-label="Écran de chargement DJOUSSE TECH">
+    <div class="dj-splash-wrap">
+      <div class="dj-splash-logo" aria-hidden="true">
+        <img src="./assets/logo.png" alt="" onerror="this.remove();var a=this.parentNode.querySelector('.dj-splash-avatar');if(a)a.hidden=false;">
+        <div class="dj-splash-avatar" hidden>DT</div>
+      </div>
+      <div id="djSplashLoading" class="dj-splash-screen">
+        <div class="dj-splash-box">
+          <div class="dj-splash-lines">
+            <div class="dj-splash-line">&gt; Initialisation du système...</div>
+            <div class="dj-splash-line">&gt; Chargement de la base de données...</div>
+            <div class="dj-splash-line">&gt; Connexion aux serveurs WhatsApp...</div>
+            <div class="dj-splash-line">&gt; Vérification des protections...</div>
+            <div class="dj-splash-line">&gt; Prêt <span class="dj-splash-cursor" aria-hidden="true"></span></div>
+          </div>
+        </div>
+        <div class="dj-splash-progress" aria-hidden="true"><div class="dj-splash-progress-bar" id="djSplashBar"></div></div>
+        <div class="dj-splash-percent" aria-live="polite"><span id="djSplashPercent">0</span>%</div>
+      </div>
+      <div id="djSplashWelcome" class="dj-splash-screen dj-splash-welcome" hidden>
+        <h1 class="dj-splash-title">BIENVENUE</h1>
+        <p class="dj-splash-subtitle">Le bot est prêt à être utilisé.</p>
+        <button type="button" class="dj-splash-enter" id="djSplashEnter">ENTRER</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="djSiteRoot">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
   <header class="site-header">
     <div class="container header-inner">
@@ -210,5 +365,74 @@
   <script src="./js/consent.js" defer></script>
   <script src="./js/analytics.js" defer></script>
   <script src="./js/errors.js" defer></script>
+  </div>
+
+  <script>
+    (function () {
+      var splash = document.getElementById('djSplash');
+      var loading = document.getElementById('djSplashLoading');
+      var welcome = document.getElementById('djSplashWelcome');
+      var bar = document.getElementById('djSplashBar');
+      var percent = document.getElementById('djSplashPercent');
+      var enter = document.getElementById('djSplashEnter');
+      var site = document.getElementById('djSiteRoot');
+      if (!splash || !loading || !welcome || !bar || !percent || !enter || !site) return;
+
+      var progress = 0;
+      var done = false;
+
+      function showWelcome() {
+        if (done) return;
+        done = true;
+        loading.hidden = true;
+        welcome.hidden = false;
+        // force reflow for fade-in
+        void welcome.offsetWidth;
+        welcome.classList.add('is-visible');
+      }
+
+      function finish() {
+        splash.classList.add('dj-splash-fadeout');
+        site.classList.add('is-visible');
+        document.body.classList.remove('dj-splash-active');
+        setTimeout(function () {
+          if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+        }, 700);
+        try { sessionStorage.setItem('djSplashSeen', '1'); } catch (e) {}
+      }
+
+      // Progress bar fills 0->100% over ~5s (CSS-like timing via JS increments)
+      var start = Date.now();
+      var duration = 5000;
+      function tickBar() {
+        var t = Math.min(1, (Date.now() - start) / duration);
+        var w = Math.round(t * 100);
+        bar.style.width = w + '%';
+        if (t < 1) requestAnimationFrame(tickBar);
+      }
+      requestAnimationFrame(tickBar);
+
+      // Random percentage increment 0->100
+      function tickPercent() {
+        if (progress >= 100) {
+          progress = 100;
+          percent.textContent = '100';
+          setTimeout(showWelcome, 350);
+          return;
+        }
+        var step = Math.floor(Math.random() * 12) + 3; // 3-14
+        progress = Math.min(100, progress + step);
+        percent.textContent = String(progress);
+        var delay = Math.floor(Math.random() * 220) + 120; // 120-340ms
+        setTimeout(tickPercent, delay);
+      }
+      setTimeout(tickPercent, 250);
+
+      enter.addEventListener('click', finish);
+      enter.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); finish(); }
+      });
+    })();
+  </script>
 </body>
 </html>
