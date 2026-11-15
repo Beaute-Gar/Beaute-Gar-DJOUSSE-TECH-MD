@@ -211,16 +211,94 @@ async function populateSiteData() {
   }
 }
 
-populateSiteData();
-
-if (!reducedMotion && 'IntersectionObserver' in window) {
-  const observer = new IntersectionObserver((entries) => {
+let revealObserver;
+function getRevealObserver() {
+  if (reducedMotion || !('IntersectionObserver' in window)) return null;
+  if (revealObserver) return revealObserver;
+  revealObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
+        revealObserver.unobserve(entry.target);
       }
     }
-  }, { threshold: 0.08 });
-  document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element));
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  return revealObserver;
+}
+
+function observeReveal(elements) {
+  const obs = getRevealObserver();
+  if (!obs) {
+    elements.forEach((el) => el.classList.add('is-visible'));
+    return;
+  }
+  elements.forEach((el) => {
+    if (el.classList.contains('is-visible') || el.dataset.revealReady === '1') return;
+    el.dataset.revealReady = '1';
+    obs.observe(el);
+  });
+}
+
+function applyAutoReveal() {
+  const groups = [
+    { sel: '.hero .stat-ribbon, .stat-ribbon, .section-heading, .page-hero, .prose > section, .prose > h2, .prose > h3, .toc, .panel, .callout, .table-wrap, .pair-grid > *, .cookie-banner', variant: '' },
+    { sel: '.card, .category-link, .command-card, .stat-item, .protection-item, .faq-list details, .step, .steps li, .mode-table tr, .data-table tbody tr, .footer-grid', variant: '' }
+  ];
+  const targets = new Set();
+  for (const { sel, variant } of groups) {
+    document.querySelectorAll(sel).forEach((el) => {
+      if (el.closest('.hero-copy') || el.closest('.chat-window') || el.closest('.site-header') || el.closest('.cookie-prefs')) return;
+      if (!el.classList.contains('reveal')) {
+        el.classList.add('reveal');
+        if (variant) el.classList.add(variant);
+      }
+      targets.add(el);
+    });
+  }
+  // Stagger enfants dans grilles/listes
+  document.querySelectorAll('.card-grid, .category-grid, .stat-ribbon, .protection-list, .command-list, .faq-list, .steps, .pair-grid').forEach((parent) => {
+    Array.from(parent.children).forEach((child, i) => {
+      if (child.classList.contains('reveal') && !child.style.getPropertyValue('--reveal-delay')) {
+        child.style.setProperty('--reveal-delay', `${Math.min(i, 8) * 60}ms`);
+      }
+    });
+  });
+  observeReveal(Array.from(targets));
+}
+
+function enhanceHero() {
+  const chat = document.querySelector('.hero .chat-window');
+  if (chat && !reducedMotion) chat.classList.add('is-floating');
+}
+
+let revealTimer;
+function scheduleReveal() {
+  window.clearTimeout(revealTimer);
+  revealTimer = window.setTimeout(applyAutoReveal, 80);
+}
+
+(async () => {
+  try { await populateSiteData(); } catch {}
+  enhanceHero();
+  applyAutoReveal();
+  window.setTimeout(applyAutoReveal, 300);
+  window.setTimeout(applyAutoReveal, 1200);
+})();
+
+if (!reducedMotion && 'MutationObserver' in document.body) {
+  const mo = new MutationObserver((mutations) => {
+    for (const m of mutations) {
+      if (m.addedNodes && m.addedNodes.length) { scheduleReveal(); break; }
+    }
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+}
+
+// Exposer pour scripts page (ex. catalogue commandes)
+window.djousseReveal = { apply: applyAutoReveal, observe: observeReveal };
+
+if (!reducedMotion && 'IntersectionObserver' in window) {
+  observeReveal(Array.from(document.querySelectorAll('[data-reveal]')));
+} else {
+  document.querySelectorAll('.reveal, [data-reveal]').forEach((el) => el.classList.add('is-visible'));
 }
