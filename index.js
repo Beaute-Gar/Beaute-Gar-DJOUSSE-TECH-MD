@@ -27,7 +27,7 @@ const { installLogger, closeLogger } = require('./src/lib/logger');
 const { openAuth, backupAll } = require('./src/core/authSafe');
 const supervisor = require('./src/core/supervisor');
 const groupOwner = require('./src/core/group-owner');
-const { getOwnerNumber } = require('./src/lib/auth');
+const { getOwnerNumber, addConnectedOwner, removeConnectedOwner, setConnectedOwners } = require('./src/lib/auth');
 const { normalizeJid } = require('./src/lib/helpers');
 
 const SESSIONS_DIR = path.join(paths.storage, 'sessions');
@@ -114,6 +114,7 @@ async function startSession(sessionName) {
 
       supervisor.mark(sessionName, shouldReconnect ? 'reconnecting' : 'closed', String(code ?? 'inconnu'));
       activeSockets.delete(sessionName);
+      removeConnectedOwner(sessionKey(sock, sessionName));
 
       if (shouldReconnect) {
         // Reconnectable : on garde la propriete des groupes pendant le delai.
@@ -149,6 +150,8 @@ async function startSession(sessionName) {
 
       const myNumber = sock.user.id.split(':')[0];
       db.setSetting('botNumber', myNumber);
+      addConnectedOwner(myNumber);
+      addConnectedOwner(sessionName);
       console.log(`[${sessionName}] Connecte : ${myNumber}`);
 
       // Restaure les droits des groupes si le bot a plante en pleine partie.
@@ -486,6 +489,7 @@ function startPairingServer() {
 // --- GESTIONNAIRE DE SESSIONS AU DEMARRAGE ---
 async function startBot() {
   await installLogger({ dir: path.join(paths.storage, 'logs'), keepDays: 14 });
+  try { setConnectedOwners([]); } catch (_) {}
 
   cmdHandler.loadCommands();
 
