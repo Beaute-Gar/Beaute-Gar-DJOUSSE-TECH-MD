@@ -1,0 +1,97 @@
+name: "🐞 Rapport de bug"
+description: "Signaler un bug ou un comportement inattendu dans DJOUSSE TECH MD"
+title: "[BUG] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler un bug.
+        ⚠️ Ne partagez pas de secrets, tokens, clés API, sessions WhatsApp ou données personnelles.
+
+  - type: checkboxes
+    id: duplicate-check
+    attributes:
+      label: Vérification préalable
+      description: Merci de confirmer avant d’envoyer le rapport.
+      options:
+        - label: "J'ai vérifié qu'il n'existe pas déjà un bug identique"
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description du bug
+      description: Décrivez clairement le problème rencontré.
+      placeholder: "Ex. La commande .menu ne répond pas dans certains groupes..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Étapes de reproduction
+      description: Indiquez les étapes précises pour reproduire le bug.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+        4. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportement attendu
+      description: Décrivez ce qui aurait dû se passer.
+      placeholder: "Ex. Le bot devrait répondre avec..."
+    validations:
+      required: true
+
+  - type: input
+    id: bot-version
+    attributes:
+      label: Version du bot
+      description: Version, tag ou hash de commit (si connu).
+      placeholder: "Ex. main@18e3a7a / v5.0"
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Version de Node
+      description: Résultat de `node -v`
+      placeholder: "Ex. v22.x.x"
+    validations:
+      required: true
+
+  - type: input
+    id: host
+    attributes:
+      label: Hébergeur
+      description: Où le bot est exécuté.
+      placeholder: "Ex. VPS, local (Windows), Render, Docker, PM2..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Collez les logs ou messages d’erreur pertinents (sans secrets ni données sensibles).
+      placeholder: "Collez ici les logs utiles..."
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte supplémentaire
+      description: Informations complémentaires (commande, groupe/privé, fréquence, captures sans données sensibles, etc.).
+      placeholder: "Toute information utile pour comprendre le bug."
+    validations:
+      required: false
