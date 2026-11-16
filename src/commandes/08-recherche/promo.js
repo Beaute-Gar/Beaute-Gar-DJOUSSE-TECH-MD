@@ -126,15 +126,11 @@ async function getTipCoupons() {
 async function getCoupons() {
   const today = dateInTz(new Date(), 'UTC');
   let coupons = [];
-  let betBetterCount = 0;
-  let betBetterError = false;
 
   try {
     const betBetter = await getBetBetterPicks({ limit: COUPON_COUNT });
     coupons = betBetter.filter(c => dateInTz(c.kickoff, 'UTC') === today);
-    betBetterCount = coupons.length;
   } catch (_) {
-    betBetterError = true;
     coupons = [];
   }
 
@@ -156,24 +152,10 @@ async function getCoupons() {
     .sort((a, b) => b.prob - a.prob)
     .slice(0, COUPON_COUNT);
 
-  return {
-    coupons,
-    betBetterCount: coupons.filter(c => c.source === 'Bet Better').length,
-    betBetterError
-  };
+  return coupons;
 }
 
-function sourceText(betBetterCount, betBetterError) {
-  if (betBetterCount > 0) {
-    return 'Source : Bet Better (betbetter.world) + TipsAudit.';
-  }
-  if (betBetterError) {
-    return 'Source : TipsAudit + cotes bookmakers (Bet Better indisponible).';
-  }
-  return 'Source : TipsAudit + cotes bookmakers (Bet Better : 0 football aujourd\'hui).';
-}
-
-function renderCoupons(coupons, dateLabel, tz, betBetterCount, betBetterError) {
+function renderCoupons(coupons, dateLabel, tz) {
   const totalStake = STAKE * coupons.length;
   const totalReturn = coupons.reduce((sum, c) => sum + STAKE * c.odd, 0);
   const allProb = coupons.reduce((prob, c) => prob * c.prob, 1);
@@ -216,11 +198,7 @@ function renderCoupons(coupons, dateLabel, tz, betBetterCount, betBetterError) {
   lines.push(style.row(`🎯 Probabilité que les ${coupons.length} passent : ${fmtPct(allProb)}`));
   lines.push(style.row(`📊 Victoires attendues : ~${expectedWins.toFixed(1)}/${coupons.length}`));
   lines.push(style.blank());
-  lines.push(style.row('⚠️ "Valide" = critères respectés, pas une garantie.'));
-  lines.push(style.row('⚠️ Coupons séparés, pas un combiné unique.'));
-  lines.push(style.row('💡 >50% de probabilité ⇒ cote <2.00.'));
   lines.push(style.row('Ne mise que ce que tu peux perdre. 18+.'));
-  lines.push(style.row(sourceText(betBetterCount, betBetterError)));
   lines.push(style.frameFooter());
 
   return lines.join('\n');
@@ -237,7 +215,7 @@ module.exports = {
         text: style.renderInfo(['Recherche des 10 coupons valides (probabilité > 50%, cote > 1.50)...'])
       }, { quoted: m });
 
-      const { coupons, betBetterCount, betBetterError } = await getCoupons();
+      const coupons = await getCoupons();
 
       if (!coupons.length) {
         return sock.sendMessage(from, {
@@ -251,9 +229,7 @@ module.exports = {
       const text = renderCoupons(
         coupons,
         dateLabelInTz(new Date(), DEFAULT_TZ),
-        DEFAULT_TZ,
-        betBetterCount,
-        betBetterError
+        DEFAULT_TZ
       );
 
       return sock.sendMessage(from, { text }, { quoted: m });
