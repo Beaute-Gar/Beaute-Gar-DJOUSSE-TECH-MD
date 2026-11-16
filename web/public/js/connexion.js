@@ -19,6 +19,36 @@ let controller;
 let codeTimer;
 let codeExpiresAt = 0;
 
+function flagEmoji(iso) {
+  return String(iso || '').toUpperCase().replace(/[A-Z]/g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)));
+}
+
+function populateCountries() {
+  const list = window.DJS_COUNTRIES;
+  if (!countryField || !Array.isArray(list) || !list.length) return;
+
+  const current = String(countryField.value || '237').replace(/\D/g, '');
+  const sorted = [...list].sort((a, b) => String(a.name).localeCompare(String(b.name), 'fr'));
+  countryField.innerHTML = '';
+
+  for (const item of sorted) {
+    const dial = String(item.dial || '').replace(/\D/g, '');
+    if (!dial) continue;
+    const option = document.createElement('option');
+    option.value = dial;
+    option.textContent = `${flagEmoji(item.iso)} +${dial} ${item.name}`;
+    countryField.appendChild(option);
+  }
+
+  if ([...countryField.options].some((o) => o.value === current)) {
+    countryField.value = current;
+  } else {
+    countryField.value = '237';
+  }
+}
+
+populateCountries();
+
 function clearCodeTimer() {
   if (codeTimer) {
     window.clearTimeout(codeTimer);
