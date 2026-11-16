@@ -10,6 +10,12 @@ const TTL = 3 * 60 * 1000;
 
 const cache = { tips: null, tipsAt: 0, fotmob: new Map() };
 
+/* ─────────────── SPORTMONKS (scores live + cotes) ─────────────── */
+const SPORTMONKS_KEY = String(process.env.SPORTMONKS_API_KEY || '').trim();
+const SPORTMONKS_BASE = 'https://api.sportmonks.com/v3/football';
+const SM_TTL = 2 * 60 * 1000;
+const smCache = { live: null, liveAt: 0, fixtures: new Map(), odds: new Map() };
+
 async function getJson(url) {
   const res = await axios.get(url, {
     timeout: 20000,
@@ -120,6 +126,215 @@ function cleanMinute(s) {
   if (!s) return null;
   const m = String(s).replace(/[^\d+]/g, '');
   return m ? m + "'" : null;
+}
+
+/* ─────────────── SPORTMONKS : scores live et cotes bookmakers ─────────────── */
+
+async function smGet(path, { params = {}, timeout = 20000 } = {}) {
+  if (!SPORTMONKS_KEY) return null;
+  const res = await axios.get(SPORTMONKS_BASE + path, {
+    timeout,
+    params: { ...params, api_token: SPORTMONKS_KEY },
+    headers: { 'User-Agent': UA, Accept: 'application/json' },
+    validateStatus: s => s >= 200 && s < 300
+  });
+  return res.data;
+}
+
+function smParticipant(fixture, location) {
+  return (fixture.participants || []).find(
+    p => String(p.meta && p.meta.location || '').toLowerCase() === location
+  );
+}
+
+function smScoreNumber(value) {
+  if (value && typeof value === 'object') {
+    const goals = Number(value.goals);
+    return Number.isFinite(goals) ? goals : null;
+  }
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function smScore(fixture, participantId) {
+  if (!participantId) return null;
+  const scores = Array.isArray(fixture.scores) ? fixture.scores : [];
+  const own = scores.filter(s => String(s.participant_id) === String(participantId));
+  if (!own.length) return null;
+  const current = own.find(s => /current/i.test(String(s.description || ''))) || own[own.length - 1];
+  return smScoreNumber(current && current.score);
+}
+
+function parseSportmonksFixture(f) {
+  if (!f) return null;
+  const homeP = smParticipant(f, 'home');
+  const awayP = smParticipant(f, 'away');
+  const fallback = String(f.name || '').split(/\s+vs\s+/i);
+  const home = (homeP && homeP.name) || fallback[0] || '';
+  const away = (awayP && awayP.name) || fallback[1] || '';
+  if (!home || !away) return null;
+
+  const state = f.state || {};
+  const stateText = `${state.name || ''} ${state.short_name || ''}`.toLowerCase().trim();
+  const stateId = Number(f.state_id);
+  const started = stateId !== 1 && !/not started|\bns\b/.test(stateText);
+  const finished = stateId === 5 || /\b(ft|aet|pen|full time|finished)\b/.test(stateText);
+  const cancelled = /(cancelled|postponed|abandoned|awarded)/.test(stateText);
+
+  const hs = smScore(f, homeP && homeP.id);
+  const as = smScore(f, awayP && awayP.id);
+  const score = hs != null && as != null
+    ? { home: hs, away: as, text: `${hs} - ${as}` }
+    : null;
+
+  let minute = null;
+  if (f.time && f.time.minute != null && Number.isFinite(Number(f.time.minute))) {
+    minute = `${Number(f.time.minute)}'`;
+  }
+
+  const kickoff = f.starting_at_timestamp
+    ? new Date(Number(f.starting_at_timestamp) * 1000)
+    : (f.starting_at ? new Date(String(f.starting_at).replace(' ', 'T') + 'Z') : null);
+
+  return {
+    fixtureId: f.id,
+    league: (f.league && f.league.name) || 'Autres',
+    home,
+    away,
+    kickoff,
+    score,
+    minute,
+    started,
+    finished,
+    cancelled,
+    state
+  };
+}
+
+async function getSportmonksLive(force = false) {
+  if (!SPORTMONKS_KEY) return [];
+  const now = Date.now();
+  if (!force && smCache.live && now - smCache.liveAt < SM_TTL) return smCache.live;
+
+  let list = [];
+  try {
+    let data = null;
+    try {
+      data = await smGet('/livescores/latest', {
+        params: { include: 'participants;league;state;scores' }
+      });
+    } catch (e) {
+      data = await smGet('/livescores/latest');
+    }
+    list = ((data && data.data) || []).map(parseSportmonksFixture).filter(Boolean);
+  } catch (e) {
+    list = [];
+  }
+  smCache.live = list;
+  smCache.liveAt = now;
+  return list;
+}
+
+async function getSportmonksFixtures(dateStr, force = false) {
+  if (!SPORTMONKS_KEY) return [];
+  const key = String(dateStr || '').slice(0, 10);
+  if (!key) return [];
+  const hit = smCache.fixtures.get(key);
+  if (!force && hit && Date.now() - hit.at < 5 * 60 * 1000) return hit.data;
+
+  try {
+    const base = new Date(`${key}T12:00:00Z`);
+    const start = dateInTz(new Date(base.getTime() - 24 * 3600 * 1000), 'UTC');
+    const end = dateInTz(new Date(base.getTime() + 24 * 3600 * 1000), 'UTC');
+    let data = null;
+    try {
+      data = await smGet(`/fixtures/between/${start}/${end}`, {
+        params: { include: 'participants;league;state;scores' }
+      });
+    } catch (e) {
+      data = await smGet(`/fixtures/between/${start}/${end}`);
+    }
+    const list = ((data && data.data) || []).map(parseSportmonksFixture).filter(Boolean);
+    smCache.fixtures.set(key, { at: Date.now(), data: list });
+    return list;
+  } catch (e) {
+    smCache.fixtures.set(key, { at: Date.now(), data: [] });
+    return [];
+  }
+}
+
+async function getSportmonksOdds(fixtureId, force = false) {
+  if (!SPORTMONKS_KEY || !fixtureId) return null;
+  const key = String(fixtureId);
+  const hit = smCache.odds.get(key);
+  if (!force && hit && Date.now() - hit.at < 5 * 60 * 1000) return hit.data;
+
+  try {
+    const data = await smGet(`/odds/pre-match/fixtures/${encodeURIComponent(fixtureId)}`);
+    const rows = ((data && data.data) || []).filter(o =>
+      Number(o.market_id) === 1 ||
+      /full\s*time\s*result|match winner/i.test(String(o.market_description || ''))
+    );
+
+    const best = { home: 0, draw: 0, away: 0 };
+    const books = { home: new Set(), draw: new Set(), away: new Set() };
+    for (const o of rows) {
+      const label = String(o.label || '').toLowerCase();
+      const k = label.includes('home') ? 'home'
+        : label.includes('draw') ? 'draw'
+          : label.includes('away') ? 'away' : null;
+      const value = Number(o.value);
+      if (!k || !Number.isFinite(value) || value <= 1) continue;
+      if (value > best[k]) best[k] = value;
+      books[k].add(String(o.bookmaker_id));
+    }
+
+    if (!best.home || !best.draw || !best.away) {
+      smCache.odds.set(key, { at: Date.now(), data: null });
+      return null;
+    }
+
+    const out = {
+      home: best.home,
+      draw: best.draw,
+      away: best.away,
+      bookCount: Math.max(books.home.size, books.draw.size, books.away.size)
+    };
+    smCache.odds.set(key, { at: Date.now(), data: out });
+    return out;
+  } catch (e) {
+    smCache.odds.set(key, { at: Date.now(), data: null });
+    return null;
+  }
+}
+
+async function enrichWithSportmonksOdds(matches, { concurrency = 2, force = false } = {}) {
+  if (!matches.length || !SPORTMONKS_KEY) return matches;
+
+  const dates = [...new Set(matches.map(mt => dateInTz(new Date(mt.kickoff), 'UTC')))];
+  const lists = await Promise.all(dates.map(d => getSportmonksFixtures(d, force)));
+  const index = new Map();
+  for (const list of lists) {
+    for (const f of list) {
+      if (!f.kickoff) continue;
+      index.set(norm(f.home) + '|' + norm(f.away) + '|' + dateInTz(f.kickoff, 'UTC'), f);
+    }
+  }
+
+  await mapLimit(matches, concurrency, async (mt) => {
+    const d = dateInTz(new Date(mt.kickoff), 'UTC');
+    const direct = index.get(norm(mt.home) + '|' + norm(mt.away) + '|' + d);
+    const reverse = index.get(norm(mt.away) + '|' + norm(mt.home) + '|' + d);
+    const f = direct || reverse;
+    if (!f) return;
+    const odds = await getSportmonksOdds(f.fixtureId, force);
+    if (!odds) return;
+    mt.sm = direct
+      ? odds
+      : { home: odds.away, draw: odds.draw, away: odds.home, bookCount: odds.bookCount };
+  });
+
+  return matches;
 }
 
 function favorite(odds) {
@@ -239,6 +454,34 @@ async function getTodayMatches({ tz = DEFAULT_TZ, force = false } = {}) {
     };
   });
 
+  // Vérification / mise à jour des scores live via SportMonks (si la clé est configurée).
+  if (SPORTMONKS_KEY) {
+    try {
+      const smLive = await getSportmonksLive(force);
+      if (smLive.length) {
+        const byKey = new Map(smLive.map(x => [norm(x.home) + '|' + norm(x.away), x]));
+        for (const mt of matches) {
+          const directKey = norm(mt.home) + '|' + norm(mt.away);
+          const reverseKey = norm(mt.away) + '|' + norm(mt.home);
+          const sm = byKey.get(directKey) || byKey.get(reverseKey);
+          if (!sm) continue;
+          const reversed = !byKey.has(directKey);
+          let score = sm.score ? sm.score.text : null;
+          if (reversed && sm.score) score = `${sm.score.away} - ${sm.score.home}`;
+          mt.live = {
+            ...(mt.live || {}),
+            score: score || mt.live && mt.live.score,
+            started: sm.started,
+            finished: sm.finished,
+            cancelled: sm.cancelled,
+            minute: sm.minute || (mt.live && mt.live.minute),
+            source: 'SportMonks'
+          };
+        }
+      }
+    } catch (e) { /* best-effort : ne jamais bloquer les pronostics */ }
+  }
+
   matches.sort((a, b) => a.kickoff - b.kickoff);
   return { date: today, tz, dateLabel, matches };
 }
@@ -272,6 +515,36 @@ async function getLiveMatches({ force = false } = {}) {
       minute: cleanMinute(st.liveTime && st.liveTime.short),
       kickoff: e.timeTS ? new Date(e.timeTS) : null
     });
+  }
+
+  // Complément / vérification des scores live via SportMonks.
+  if (SPORTMONKS_KEY) {
+    try {
+      const smLive = await getSportmonksLive(force);
+      for (const sm of smLive) {
+        const key = norm(sm.home) + '|' + norm(sm.away);
+        const existing = live.find(x => {
+          const k = norm(x.home) + '|' + norm(x.away);
+          return k === key || k === norm(sm.away) + '|' + norm(sm.home);
+        });
+        if (existing) {
+          const reversed = norm(existing.home) !== norm(sm.home);
+          if (sm.score) existing.score = reversed ? `${sm.score.away} - ${sm.score.home}` : sm.score.text;
+          if (sm.minute) existing.minute = sm.minute;
+          existing.source = 'SportMonks';
+        } else {
+          live.push({
+            league: sm.league,
+            home: sm.home,
+            away: sm.away,
+            score: sm.score ? sm.score.text : null,
+            minute: sm.minute,
+            kickoff: sm.kickoff,
+            source: 'SportMonks'
+          });
+        }
+      }
+    } catch (e) { /* best-effort */ }
   }
 
   live.sort((a, b) => {
@@ -496,6 +769,8 @@ async function enrichBookmakerMatches(matches, { concurrency = 5 } = {}) {
 module.exports = {
   getTodayMatches,
   getLiveMatches,
+  getSportmonksLive,
+  enrichWithSportmonksOdds,
   enrichWithRealOdds,
   getBookmakerMatches,
   enrichBookmakerMatches,
@@ -504,5 +779,6 @@ module.exports = {
   timeInTz,
   dateLabelInTz,
   cleanMinute,
+  norm,
   DEFAULT_TZ
 };

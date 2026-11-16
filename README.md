@@ -93,6 +93,7 @@ C’est une invitation chaleureuse (pas une obligation) — chaque étoile souti
 - **Médias** : stickers, conversions, récupération de médias (ex. vue unique si disponible).
 - **Téléchargements & recherche** : outils média/recherche (selon disponibilité des services).
 - **IA** : commandes IA (selon clés/services configurés).
+- **Pronostics football** : `.promo`, `.promo live`, `.promo ticket [n] [mise]`, `.promo ticket safe` — ticket clair avec probabilité, cote totale, gain potentiel et niveau de risque (TipsAudit + SportMonks/Infersports).
 - **Multi-session / ownership** : prise en charge des sessions connectées et du routage des actions selon le contexte (groupe/session).
 
 ---
