@@ -51,10 +51,9 @@ async function handleMessage(sock, m) {
   const memberSelfNoCmd = currentMode === 'self' && !isOwnerMsg && !(isGameCommand || hasActiveGame);
 
   // 2. --- ROUTAGE GROUPE / MULTI-SESSION ---
-  // Objectif : une commande tapée par une session connectée (admin/propriétaire)
-  // doit être exécutée et répondre depuis CETTE session. Les messages des autres
-  // membres restent traités par une seule session pour éviter les doublons
-  // (protections, réponses automatiques).
+  // Si plusieurs sessions du bot sont présentes dans le groupe, chaque session
+  // ne traite que les messages de son propre compte. Sinon, une seule session
+  // possède le groupe pour éviter les doublons.
   if (isGroup(from)) {
     const mySession = auth.normalizeNumber(sock.user && sock.user.id) || auth.normalizeNumber(groupOwner.sessionOf(sock));
     const senderNums = (typeof auth.senderCandidates === 'function')
@@ -65,7 +64,18 @@ async function handleMessage(sock, m) {
     const senderIsConnectedSession = !!senderSession;
     const isClaimCmd = /^\.\s*claim\b/i.test(text);
 
-    if (senderIsConnectedSession) {
+    let multiSession = false;
+    try { multiSession = await groupOwner.isMultiSession(sock, from); } catch (_) {}
+
+    if (multiSession) {
+      // Multi-sessions : chaque session écoute uniquement son propre compte.
+      const myNumber = normalizeJid(sock.user && sock.user.id) || groupOwner.sessionOf(sock);
+      const isMine = Boolean(
+        m.key.fromMe ||
+        (myNumber && senderNums.includes(myNumber))
+      );
+      if (!isMine) return;
+    } else if (senderIsConnectedSession) {
       // Un message envoyé par une session connectée : seule la session émettrice
       // le traite (exécution/réponse depuis son compte). Les autres l'ignorent.
       // Exception : .claim reste géré par le routeur (coordination inter-sessions).

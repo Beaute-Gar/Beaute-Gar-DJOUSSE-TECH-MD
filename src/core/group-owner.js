@@ -153,6 +153,27 @@ function anotherAdminBot(meta, me) {
 }
 
 /**
+ * Le groupe contient-il plusieurs sessions actives du bot ?
+ * Dans ce cas, chaque session ne traite que les messages de son propre compte.
+ */
+async function isMultiSession(sock, groupId) {
+  const meta = await metaOf(sock, groupId);
+  if (!meta || !Array.isArray(meta.participants)) return false;
+
+  const active = new Set(runtime.listActive().map(normalizeJid));
+  if (active.size < 2) return false;
+
+  let count = 0;
+  for (const p of meta.participants) {
+    if (participantIds(p).some((id) => active.has(id))) {
+      count += 1;
+      if (count >= 2) return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Ce bot peut-il revendiquer le groupe ?
  *  - oui s'il est admin ;
  *  - oui si aucun autre bot actif n'est admin (sinon le groupe resterait mort).
@@ -380,6 +401,7 @@ module.exports = {
   route,
   canRead,
   ensureForEvent,
+  isMultiSession,
   isUsable,
   setRuntime,
   markUp,

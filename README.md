@@ -94,7 +94,7 @@ C’est une invitation chaleureuse (pas une obligation) — chaque étoile souti
 - **Téléchargements & recherche** : outils média/recherche (selon disponibilité des services).
 - **IA** : commandes IA (selon clés/services configurés).
 - **Pronostics football** : `.promo` — 10 coupons séparés (probabilité > 50% et cote > 1.50) avec choix, probabilité, cote juste/bookmaker et gain potentiel. Sources : Bet Better (API gratuite, sans clé, CC BY 4.0) puis TipsAudit + Infersports/SportMonks en secours. Aucun pari n'est garanti : « valide » signifie seulement que les critères sont respectés.
-- **Multi-session / ownership** : prise en charge des sessions connectées et du routage des actions selon le contexte (groupe/session).
+- **Multi-session / ownership** : dans un groupe où plusieurs sessions du bot sont présentes, chaque session ne traite que les messages de son propre compte ; sinon, une seule session possède le groupe pour éviter les doublons (`.claim` permet de transférer la propriété).
 
 ---
 
