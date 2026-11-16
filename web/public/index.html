@@ -35,6 +35,11 @@
     /* Splash Screen DJOUSSE TECH */
     body.dj-splash-active { overflow: hidden; }
     #djSplash {
+      --sp-a: #00d4ff; --sp-b: #b300ff; --sp-c: #00d4ff;
+      --sp-bg1: rgba(0,212,255,0.15); --sp-bg2: rgba(179,0,255,0.15);
+      --sp-glow1: rgba(0,212,255,0.35); --sp-glow2: rgba(179,0,255,0.25);
+      --sp-border: rgba(0,212,255,0.2); --sp-boxbg: rgba(20,20,25,0.85);
+      --sp-float: 3s; --sp-pulse: 4s; --sp-shift: 18s;
       position: fixed; inset: 0; z-index: 9999;
       display: flex; align-items: center; justify-content: center;
       background: #09090b; color: #e0e0e0;
@@ -43,22 +48,41 @@
     }
     #djSplash::before {
       content: ""; position: absolute; inset: -20%;
-      background: radial-gradient(circle at center, rgba(0,212,255,0.15) 0%, rgba(179,0,255,0.15) 45%, rgba(0,0,0,0) 70%);
+      background: radial-gradient(circle at center, var(--sp-bg1) 0%, var(--sp-bg2) 45%, rgba(0,0,0,0) 70%);
       filter: blur(40px);
-      animation: djSplashPulse 4s ease-in-out infinite alternate;
+      animation: djSplashPulse var(--sp-pulse) ease-in-out infinite alternate;
       pointer-events: none;
     }
-    @keyframes djSplashPulse {
-      0% { transform: scale(0.9); opacity: 0.6; }
-      100% { transform: scale(1.1); opacity: 1; }
+    #djSplash::after {
+      content: ""; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.12; pointer-events: none;
+      animation: djSplashGrid var(--sp-shift) linear infinite;
     }
+    @keyframes djSplashPulse {
+      0% { transform: scale(0.9) rotate(0deg); opacity: 0.55; }
+      100% { transform: scale(1.12) rotate(3deg); opacity: 1; }
+    }
+    @keyframes djSplashGrid { 0% { background-position: 0 0; } 100% { background-position: 140px 140px; } }
+    @keyframes djSplashScan { 0% { transform: translateY(-120%); } 100% { transform: translateY(120%); } }
+    @keyframes djSplashDrift { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(-2%,2%,0) scale(1.08); } }
     @keyframes djSplashFloat {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
     }
+    @keyframes djSplashFloat2 {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
+    @keyframes djSplashSpinSlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @keyframes djSplashTypeLine {
       from { opacity: 0; transform: translateX(-18px); }
       to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes djSplashTypeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     @keyframes djSplashBlink {
       0%, 49% { opacity: 1; }
@@ -69,10 +93,11 @@
       display: flex; flex-direction: column; align-items: center; gap: 18px;
     }
     .dj-splash-logo {
+      position: relative;
       width: 110px; height: 110px; border-radius: 50%; padding: 4px;
-      background: linear-gradient(135deg, #00d4ff, #b300ff);
-      box-shadow: 0 0 28px rgba(0,212,255,0.35), 0 0 46px rgba(179,0,255,0.25);
-      animation: djSplashFloat 3s ease-in-out infinite;
+      background: linear-gradient(135deg, var(--sp-a), var(--sp-b));
+      box-shadow: 0 0 28px var(--sp-glow1), 0 0 46px var(--sp-glow2);
+      animation: djSplashFloat var(--sp-float) ease-in-out infinite;
       flex: 0 0 auto;
     }
     .dj-splash-logo img, .dj-splash-logo .dj-splash-avatar {
@@ -80,24 +105,25 @@
     }
     .dj-splash-logo img { background: #111; }
     .dj-splash-avatar {
-      display: grid; place-items: center; color: #00d4ff; font-size: 0.62rem; font-weight: 700;
+      display: grid; place-items: center; color: var(--sp-c); font-size: 0.62rem; font-weight: 700;
       font-style: italic; line-height: 1.2; text-align: center; padding: 8px;
       background: transparent; border-radius: 0;
       letter-spacing: 0.02em;
     }
     .dj-splash-box {
       position: relative; width: 100%;
-      background: rgba(20, 20, 25, 0.85);
+      background: var(--sp-boxbg);
       backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       border-radius: 12px;
-      border: 1px solid rgba(0, 212, 255, 0.2);
+      border: 1px solid var(--sp-border);
       box-shadow: 0 10px 40px rgba(0,0,0,0.6);
       padding: 52px 22px 46px;
+      overflow: hidden;
     }
     .dj-splash-box::before,
     .dj-splash-box::after {
       position: absolute; left: 14px; right: 14px;
-      color: #00d4ff; font-weight: 700; font-size: 0.92rem;
+      color: var(--sp-c); font-weight: 700; font-size: 0.92rem;
       letter-spacing: 0.02em; white-space: nowrap; overflow: hidden;
       font-family: "Fira Code", monospace; pointer-events: none;
     }
@@ -116,20 +142,20 @@
     .dj-splash-line:nth-child(5) { animation-delay: 3.3s; color: #e0e0e0; }
     .dj-splash-cursor {
       display: inline-block; width: 9px; height: 1.05em; margin-left: 4px;
-      background: #00d4ff; vertical-align: -0.15em;
+      background: var(--sp-c); vertical-align: -0.15em;
       animation: djSplashBlink 1s steps(1, end) infinite;
     }
     .dj-splash-progress {
       width: 100%; height: 10px; border-radius: 999px; overflow: hidden;
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+      background: rgba(255,255,255,0.08); border: 1px solid var(--sp-border);
       margin-top: 6px;
     }
     .dj-splash-progress-bar {
       height: 100%; width: 0%;
-      background: linear-gradient(90deg, #00d4ff, #b300ff);
+      background: linear-gradient(90deg, var(--sp-a), var(--sp-b));
       border-radius: inherit; transition: width 0.25s ease;
     }
-    .dj-splash-percent { color: #00d4ff; font-size: 0.95rem; font-weight: 600; margin-top: 4px; }
+    .dj-splash-percent { color: var(--sp-c); font-size: 0.95rem; font-weight: 600; margin-top: 4px; }
     .dj-splash-screen { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; }
     .dj-splash-screen[hidden] { display: none !important; }
     .dj-splash-welcome {
@@ -139,24 +165,42 @@
     .dj-splash-welcome.is-visible { opacity: 1; }
     .dj-splash-title {
       margin: 0 0 10px; font-size: clamp(2rem, 8vw, 3.2rem); font-weight: 700; letter-spacing: 0.08em;
-      background: linear-gradient(90deg, #00d4ff, #b300ff);
+      background: linear-gradient(90deg, var(--sp-a), var(--sp-b));
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     .dj-splash-subtitle { margin: 0 0 24px; color: #808080; font-size: 1rem; }
     .dj-splash-enter {
       display: inline-flex; align-items: center; justify-content: center;
       min-width: 160px; min-height: 48px; padding: 12px 22px;
-      border: 1px solid #00d4ff; border-radius: 8px;
-      color: #00d4ff; background: transparent;
+      border: 1px solid var(--sp-a); border-radius: 8px;
+      color: var(--sp-a); background: transparent;
       font-family: "Fira Code", monospace; font-size: 1rem; font-weight: 700;
       cursor: pointer; transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
     }
-    .dj-splash-enter:hover { background: #00d4ff; color: #000; box-shadow: 0 0 24px rgba(0,212,255,0.35); }
+    .dj-splash-enter:hover { background: var(--sp-a); color: #000; box-shadow: 0 0 24px var(--sp-glow1); }
     #djSplash.dj-splash-fadeout { opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
     #djSiteRoot { opacity: 0; transition: opacity 0.6s ease; }
     #djSiteRoot.is-visible { opacity: 1; }
+
+    /* Variantes d'animation (choisie aléatoirement à chaque visite) */
+    #djSplash.dj-anim-neon { --sp-a:#00d4ff; --sp-b:#b300ff; --sp-c:#00d4ff; --sp-bg1:rgba(0,212,255,.18); --sp-bg2:rgba(179,0,255,.16); --sp-glow1:rgba(0,212,255,.38); --sp-glow2:rgba(179,0,255,.28); }
+    #djSplash.dj-anim-matrix { --sp-a:#00ff88; --sp-b:#00cc66; --sp-c:#39ff88; --sp-bg1:rgba(0,255,136,.12); --sp-bg2:rgba(0,100,60,.18); --sp-glow1:rgba(0,255,136,.32); --sp-glow2:rgba(0,180,90,.22); --sp-border:rgba(0,255,136,.22); }
+    #djSplash.dj-anim-matrix::before { background: radial-gradient(circle at 30% 30%, var(--sp-bg1), transparent 55%), radial-gradient(circle at 70% 70%, var(--sp-bg2), transparent 50%); animation: djSplashDrift 7s ease-in-out infinite alternate; }
+    #djSplash.dj-anim-matrix::after { opacity: .22; background-image: linear-gradient(rgba(0,255,136,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,.05) 1px, transparent 1px); background-size: 22px 22px; }
+    #djSplash.dj-anim-matrix .dj-splash-box::before { content: "╭┄┄『 MATRIX / BOOT 』┄❍"; }
+    #djSplash.dj-anim-solar { --sp-a:#ffb300; --sp-b:#ff5e00; --sp-c:#ffd36a; --sp-bg1:rgba(255,179,0,.16); --sp-bg2:rgba(255,94,0,.14); --sp-glow1:rgba(255,179,0,.34); --sp-glow2:rgba(255,94,0,.22); --sp-border:rgba(255,179,0,.22); }
+    #djSplash.dj-anim-solar::before { animation: djSplashSpinSlow 22s linear infinite; filter: blur(50px); inset: -35%; }
+    #djSplash.dj-anim-solar .dj-splash-logo { animation: djSplashFloat2 2.8s ease-in-out infinite; }
+    #djSplash.dj-anim-aurora { --sp-a:#4facfe; --sp-b:#00f2fe; --sp-c:#8fd3ff; --sp-bg1:rgba(79,172,254,.16); --sp-bg2:rgba(0,242,254,.14); --sp-glow1:rgba(79,172,254,.34); --sp-glow2:rgba(0,242,254,.22); --sp-border:rgba(79,172,254,.22); }
+    #djSplash.dj-anim-aurora::before { background: linear-gradient(120deg, rgba(79,172,254,.18), rgba(0,242,254,.12), rgba(120,80,255,.14)); background-size: 200% 200%; animation: djSplashAurora 8s ease infinite; filter: blur(46px); }
+    @keyframes djSplashAurora { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    #djSplash.dj-anim-crimson { --sp-a:#ff3b6a; --sp-b:#ff8a00; --sp-c:#ff6b8f; --sp-bg1:rgba(255,59,106,.16); --sp-bg2:rgba(255,138,0,.12); --sp-glow1:rgba(255,59,106,.34); --sp-glow2:rgba(255,138,0,.2); --sp-border:rgba(255,59,106,.22); }
+    #djSplash.dj-anim-crimson::after { opacity: .18; background-image: linear-gradient(transparent 95%, rgba(255,59,106,.18) 96%); background-size: 100% 6px; animation: djSplashScan 6s linear infinite; }
+    #djSplash.dj-anim-crimson .dj-splash-box::before { content: "╭┄┄『 SYSTEM / SECURE 』┄❍"; }
+    #djSplash.dj-anim-aurora .dj-splash-line, #djSplash.dj-anim-solar .dj-splash-line { animation-name: djSplashTypeUp; }
+
     @media (prefers-reduced-motion: reduce) {
-      #djSplash::before, .dj-splash-logo, .dj-splash-line, .dj-splash-cursor { animation: none !important; }
+      #djSplash::before, #djSplash::after, .dj-splash-logo, .dj-splash-line, .dj-splash-cursor { animation: none !important; }
       .dj-splash-line { opacity: 1; transform: none; }
       #djSplash, #djSplash.dj-splash-fadeout, #djSiteRoot, .dj-splash-welcome { transition: none !important; }
     }

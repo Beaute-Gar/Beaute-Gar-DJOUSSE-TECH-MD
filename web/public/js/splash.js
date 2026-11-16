@@ -10,6 +10,69 @@
   var avatar = document.getElementById('djSplashAvatar');
   if (!splash || !loading || !welcome || !bar || !percent || !enter || !site) return;
 
+  // Variante visuelle aléatoire à chaque visite (Android / PC)
+  var variants = ['dj-anim-neon', 'dj-anim-matrix', 'dj-anim-solar', 'dj-anim-aurora', 'dj-anim-crimson'];
+  var variant = variants[Math.floor(Math.random() * variants.length)];
+  splash.classList.add(variant);
+
+  // Lignes de chargement aléatoires selon la variante
+  var lineSets = {
+    'dj-anim-neon': [
+      '> Initialisation du système...',
+      '> Chargement de la base de données...',
+      '> Connexion aux serveurs WhatsApp...',
+      '> Vérification des protections...',
+      '> Prêt'
+    ],
+    'dj-anim-matrix': [
+      '> Boot sequence: OK',
+      '> Décryptage des modules...',
+      '> Liaison canaux sécurisés...',
+      '> Synchronisation des gardes...',
+      '> Accès accordé'
+    ],
+    'dj-anim-solar': [
+      '> Réveil des services...',
+      '> Calibration des outils...',
+      '> Chargement des menus...',
+      '> Mise en orbite du bot...',
+      '> Système opérationnel'
+    ],
+    'dj-anim-aurora': [
+      '> Ouverture de session...',
+      '> Flux de données en cours...',
+      '> Préparation de l’interface...',
+      '> Connexion des passerelles...',
+      '> Tout est prêt'
+    ],
+    'dj-anim-crimson': [
+      '> Scan de sécurité...',
+      '> Activation de DJOUSSE GUARD...',
+      '> Verrouillage des protections...',
+      '> Contrôle des accès...',
+      '> Défenses actives'
+    ]
+  };
+  var linesBox = loading.querySelector('.dj-splash-lines');
+  var chosenLines = lineSets[variant] || lineSets['dj-anim-neon'];
+  if (linesBox) {
+    linesBox.innerHTML = '';
+    for (var i = 0; i < chosenLines.length; i++) {
+      var line = document.createElement('div');
+      line.className = 'dj-splash-line';
+      if (i === chosenLines.length - 1) {
+        line.textContent = chosenLines[i] + ' ';
+        var cur = document.createElement('span');
+        cur.className = 'dj-splash-cursor';
+        cur.setAttribute('aria-hidden', 'true');
+        line.appendChild(cur);
+      } else {
+        line.textContent = chosenLines[i];
+      }
+      linesBox.appendChild(line);
+    }
+  }
+
   if (logoImg && avatar) {
     logoImg.addEventListener('error', function () {
       logoImg.remove();
