@@ -6,3 +6,6 @@ window.DJS_API_BASE = window.DJS_API_BASE || '';
 // Délai total et tentatives pour la résilience en cas de tunnel coupé.
 window.DJS_API_TIMEOUT_MS = window.DJS_API_TIMEOUT_MS || 12000;
 window.DJS_API_RETRIES = typeof window.DJS_API_RETRIES === 'number' ? window.DJS_API_RETRIES : 2;
+// Mesure d'audience Vercel : à passer à true UNIQUEMENT si "Web Analytics"
+// est activé dans le projet Vercel (sinon /_vercel/insights/script.js renvoie 404).
+window.DJS_ANALYTICS_ENABLED = window.DJS_ANALYTICS_ENABLED === true;

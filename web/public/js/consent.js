@@ -40,9 +40,11 @@
 
   function loadAnalytics() {
     if (window.__djsAnalyticsLoaded) return;
+    // Ne charge le script Vercel que s'il est réellement activé sur le projet.
+    // Par défaut il ne l'est pas : éviter un 404 /_vercel/insights/script.js
+    // (surtout sur les previews Vercel et en local).
+    if (window.DJS_ANALYTICS_ENABLED !== true) return;
     window.__djsAnalyticsLoaded = true;
-    // Vercel Web Analytics: activer "Web Analytics" dans le projet Vercel.
-    // Le script est servi par la plateforme en production.
     var s = document.createElement('script');
     s.defer = true;
     s.src = '/_vercel/insights/script.js';
