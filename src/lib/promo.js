@@ -766,10 +766,99 @@ async function enrichBookmakerMatches(matches, { concurrency = 5 } = {}) {
   return matches;
 }
 
+/* ─────────────── BET BETTER (probabilités + cotes justes) ─────────────── */
+const BETBETTER_BASE = 'https://betbetter.world';
+const BETBETTER_TTL = 15 * 60 * 1000;
+const BETBETTER_LEAGUES = [
+  ['epl', 'Premier League'],
+  ['efl-championship', 'Championship'],
+  ['la-liga', 'La Liga'],
+  ['serie-a', 'Serie A'],
+  ['bundesliga', 'Bundesliga'],
+  ['ligue-1', 'Ligue 1'],
+  ['mls', 'MLS'],
+  ['brazil-serie-a', 'Brasileirão'],
+  ['world-cup', 'Coupe du Monde'],
+  ['a-league', 'A-League']
+];
+const betBetterCache = { at: 0, picks: [] };
+
+function betBetterSelection(pick) {
+  const selection = String(pick.selection || '').trim();
+  const line = pick.line != null && pick.line !== '' ? ` ${pick.line}` : '';
+  const market = String(pick.market || '').trim().toLowerCase();
+  if (market === 'head to head') {
+    return /^draw$/i.test(selection) ? 'X (Nul)' : selection;
+  }
+  return `${selection}${line}`.trim();
+}
+
+/**
+ * API gratuite Bet Better (CC BY 4.0, sans clé) : probabilités du modèle
+ * et cotes justes. On ne garde que les picks football gratuits qui respectent
+ * le filtre du bot (> 50% et cote > 1.50).
+ */
+async function getBetBetterPicks({ force = false, limit = 10 } = {}) {
+  const now = Date.now();
+  if (!force && betBetterCache.at && now - betBetterCache.at < BETBETTER_TTL) {
+    return betBetterCache.picks.slice(0, limit);
+  }
+
+  const results = await Promise.allSettled(
+    BETBETTER_LEAGUES.map(async ([path, label]) => {
+      const url = `${BETBETTER_BASE}/soccer/${path}/best-bets?format=json&free=1`;
+      const data = await getJson(url);
+      if (!data || !Array.isArray(data.picks)) return [];
+
+      return data.picks.map((pick) => {
+        if (pick.locked || pick.leanOnly) return null;
+        const prob = Number(pick.modelProbabilityPct);
+        const odd = Number(pick.fairOdds);
+        if (!Number.isFinite(prob) || !Number.isFinite(odd)) return null;
+        if (prob <= 50 || odd <= 1.5) return null;
+
+        const kickoff = new Date(pick.gameTimeUtc);
+        if (Number.isNaN(kickoff.getTime())) return null;
+
+        const game = String(pick.game || '').trim();
+        const parts = game.split(' @ ');
+        const away = (parts.length > 1 ? parts[0] : '').trim();
+        const home = (parts.length > 1 ? parts[1] : parts[0]).trim();
+        if (!home || !away) return null;
+
+        return {
+          source: 'Bet Better',
+          league: label,
+          home,
+          away,
+          kickoff,
+          market: String(pick.market || '').trim(),
+          pickLabel: betBetterSelection(pick),
+          prob: prob / 100,
+          odd,
+          book: null,
+          edge: null,
+          confidence: pick.confidence || null
+        };
+      }).filter(Boolean);
+    })
+  );
+
+  const picks = results
+    .flatMap(r => (r.status === 'fulfilled' ? r.value : []))
+    .filter(p => p && p.home && p.away && p.pickLabel)
+    .sort((a, b) => b.prob - a.prob);
+
+  betBetterCache.at = now;
+  betBetterCache.picks = picks;
+  return picks.slice(0, limit);
+}
+
 module.exports = {
   getTodayMatches,
   getLiveMatches,
   getSportmonksLive,
+  getBetBetterPicks,
   enrichWithSportmonksOdds,
   enrichWithRealOdds,
   getBookmakerMatches,

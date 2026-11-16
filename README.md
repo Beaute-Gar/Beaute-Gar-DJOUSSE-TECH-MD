@@ -93,7 +93,7 @@ C’est une invitation chaleureuse (pas une obligation) — chaque étoile souti
 - **Médias** : stickers, conversions, récupération de médias (ex. vue unique si disponible).
 - **Téléchargements & recherche** : outils média/recherche (selon disponibilité des services).
 - **IA** : commandes IA (selon clés/services configurés).
-- **Pronostics football** : `.promo` (ticket du jour, 3 sélections par défaut), `.promo list`, `.promo live`, `.promo ticket [1-10] [mise]` (ex. `.promo ticket 10 1000`), `.promo ticket safe` — ticket clair avec probabilité, cote totale, gain potentiel et niveau de risque (TipsAudit + SportMonks/Infersports).
+- **Pronostics football** : `.promo` — 10 coupons séparés (probabilité > 50% et cote > 1.50) avec choix, probabilité, cote juste/bookmaker et gain potentiel. Sources : Bet Better (API gratuite, sans clé, CC BY 4.0) puis TipsAudit + Infersports/SportMonks en secours. Aucun pari n'est garanti : « valide » signifie seulement que les critères sont respectés.
 - **Multi-session / ownership** : prise en charge des sessions connectées et du routage des actions selon le contexte (groupe/session).
 
 ---
