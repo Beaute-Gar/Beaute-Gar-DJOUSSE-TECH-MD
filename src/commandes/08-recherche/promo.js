@@ -480,7 +480,11 @@ module.exports = {
         lines.push(style.row('Ne mise que ce que tu peux perdre. 18+.'));
         lines.push(style.row('Sources : TipsAudit + SportMonks/Infersports.'));
         lines.push(style.row('🏦 = cote bookmaker • ≈ = cote équitable'));
-        lines.push(style.row('.promo ticket 5 2000 (plus risqué) | .promo ticket safe'));
+        if (picks.length < 10) {
+          lines.push(style.row('💡 Plus de sélections : .promo ticket 10 [mise]'));
+        }
+        lines.push(style.row('.promo ticket 10 1000 (1 à 10, plus risqué)'));
+        lines.push(style.row('.promo ticket safe (2 sélections)'));
         lines.push(style.row('.promo ticket live [n] [mise]'));
         lines.push(style.frameFooter());
 
