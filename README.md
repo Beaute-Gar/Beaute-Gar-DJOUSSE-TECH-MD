@@ -1,29 +1,29 @@
-<div align=\"center\">
+<div align="center">
 
-<img src=\"https://capsule-render.vercel.app/api?type=waving&color=0:00d4ff,100:b300ff&height=180&section=header&text=DJOUSSE%20TECH%20MD&fontSize=46&fontAlignY=38&animation=twinkling&fontColor=ffffff\" width=\"100%\" alt=\"Bannière DJOUSSE TECH MD\" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00d4ff,100:b300ff&height=180&section=header&text=DJOUSSE%20TECH%20MD&fontSize=46&fontAlignY=38&animation=twinkling&fontColor=ffffff" width="100%" alt="Bannière DJOUSSE TECH MD" />
 
 <p>
-  <a href=\"https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/stargazers\"><img src=\"https://img.shields.io/github/stars/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD?style=flat-square&logo=github&color=00d4ff&labelColor=09090b\" alt=\"Étoiles\" /></a>
-  <a href=\"https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/network/members\"><img src=\"https://img.shields.io/github/forks/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD?style=flat-square&logo=github&color=b300ff&labelColor=09090b\" alt=\"Forks\" /></a>
-  <a href=\"https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/blob/main/LICENSE\"><img src=\"https://img.shields.io/badge/licence-MIT-00ff88?style=flat-square&labelColor=09090b\" alt=\"Licence MIT\" /></a>
-  <img src=\"https://img.shields.io/badge/Node.js-%E2%89%A522-339933?style=flat-square&logo=node.js&logoColor=white&labelColor=09090b\" alt=\"Version Node\" />
+  <a href="https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/stargazers"><img src="https://img.shields.io/github/stars/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD?style=flat-square&logo=github&color=00d4ff&labelColor=09090b" alt="Étoiles" /></a>
+  <a href="https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/network/members"><img src="https://img.shields.io/github/forks/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD?style=flat-square&logo=github&color=b300ff&labelColor=09090b" alt="Forks" /></a>
+  <a href="https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/blob/main/LICENSE"><img src="https://img.shields.io/badge/licence-MIT-00ff88?style=flat-square&labelColor=09090b" alt="Licence MIT" /></a>
+  <img src="https://img.shields.io/badge/Node.js-%E2%89%A522-339933?style=flat-square&logo=node.js&logoColor=white&labelColor=09090b" alt="Version Node" />
 </p>
 
 <p><strong>💙 Laisse une étoile ⭐ avant de cloner ou forker ce projet, ça m'aide énormément.</strong><br/>
 C’est une invitation chaleureuse (pas une obligation) — chaque étoile soutient vraiment le projet 🙏</p>
 
 <p>
-  👉 <a href=\"https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD\"><strong>Ouvrir la page du dépôt</strong></a><br/>
+  👉 <a href="https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD"><strong>Ouvrir la page du dépôt</strong></a><br/>
   <sub>Puis clique sur le bouton <strong>⭐ Star</strong> en haut à droite de la page GitHub.</sub>
 </p>
 
 <p>
   🔒 <strong>Les Pull Requests sont désactivées sur ce dépôt.</strong><br/>
-  Pour proposer une amélioration, passe par les <a href=\"https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions\">Discussions</a>.
+  Pour proposer une amélioration, passe par les <a href="https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions">Discussions</a>.
 </p>
 
 <p>
-  <a href=\"https://chat.whatsapp.com/CSlUZvOaPYo8m9S7zjHfNM\">💬 Rejoindre le groupe WhatsApp</a>
+  <a href="https://chat.whatsapp.com/CSlUZvOaPYo8m9S7zjHfNM">💬 Rejoindre le groupe WhatsApp</a>
 </p>
 
 </div>
