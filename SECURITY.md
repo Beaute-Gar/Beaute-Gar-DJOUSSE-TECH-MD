@@ -1,61 +1,49 @@
 # 🔐 Politique de sécurité — DJOUSSE TECH MD
 
-La sécurité de **DJOUSSE TECH MD** et de ses utilisateurs est une priorité pour **DJOUSSE TECH** (Owner : **BeauteGar**).  
-Merci de nous aider à protéger le projet en signalant les vulnérabilités de manière responsable.
+Merci d’aider à protéger **DJOUSSE TECH MD** et ses utilisateurs. Ce projet est un bot WhatsApp multi-device : la sécurité des comptes, des sessions, des tokens et des données est prioritaire.
 
----
+## Versions supportées
 
-## 🚨 Signaler une faille de sécurité
+| Version / branche | Support sécurité |
+|---|---|
+| `main` (dernière version publiée) | ✅ Supportée |
+| Versions/commits plus anciens | ⚠️ Non garantis (mise à jour recommandée) |
+| Forks et modifications tierces | ❌ Non supportés par ce dépôt |
 
-**Merci de ne pas signaler une vulnérabilité de sécurité via une Issue publique, une Pull Request publique ou une Discussion publique.**
+> Nous recommandons d’utiliser la dernière version de la branche `main` et de maintenir vos dépendances à jour.
 
-Pour signaler une faille, contactez-nous par e-mail :
+## Signaler une faille
 
-- **Contact sécurité** : **contact@djousse-tech.com**
-- **Objet recommandé** : `[SECURITY] DJOUSSE TECH MD — <résumé court>`
+**Ne signalez pas une faille de sécurité dans une issue publique, une Pull Request publique ou une Discussion publique.**
 
-### Informations utiles à inclure
-- Description claire de la vulnérabilité et de son impact potentiel
-- Étapes de reproduction / preuve de concept (PoC) minimale
-- Composant concerné (bot, commande, protection, web/appairage, API, dépendance, etc.)
-- Version/commit, environnement (OS, Node.js, configuration pertinente **sans secrets**)
-- Toute suggestion de correctif ou d’atténuation (si disponible)
+### Canaux de signalement (par ordre de priorité)
 
-> ⚠️ Ne joignez pas de secrets, tokens, clés API, sessions WhatsApp, sauvegardes ou données personnelles réelles. Si nécessaire, anonymisez/masquez les informations sensibles.
+1. **Signalement privé de vulnérabilités GitHub (prioritaire)** :  
+   https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/security/advisories/new
+2. **E-mail (si le canal GitHub n’est pas disponible)** : **[A_REMPLIR]**
 
----
+### Ce qu’il faut inclure dans le rapport
 
-## ⏱️ Délais de réponse (engagement indicatif)
+- Description claire de la vulnérabilité et de l’impact potentiel
+- Composant concerné (bot, commande, protection, web/appairage/API, dépendance, configuration, etc.)
+- Étapes de reproduction détaillées et/ou preuve de concept (PoC) minimale
+- Version/commit affecté, environnement (OS, Node.js, hébergeur) et prérequis
+- Captures/logs utiles **sans données sensibles** (masquez tokens, clés, numéros, sessions)
+- Suggestion de correctif ou d’atténuation (si vous en avez une)
 
-Nous nous engageons à traiter les signalements de bonne foi avec sérieux :
+## Délais et engagement
 
-- **Accusé de réception** : sous **72 heures** (jours ouvrés, dans la mesure du possible)
-- **Évaluation initiale / triage** : sous **7 jours** après réception des informations nécessaires
-- **Mise à jour de suivi** : selon la complexité, avec des points d’étape raisonnables jusqu’à résolution ou atténuation
+- **Accusé de réception** : sous **72 heures**
+- **Premier retour** (triage/évaluation initiale) : sous **7 jours**
+- **Suivi** : mises à jour raisonnables selon la gravité, la complexité et la reproductibilité
+- **Confidentialité** : votre signalement sera traité de manière confidentielle, dans la mesure du possible
+- **Divulgation coordonnée** : merci de nous laisser un délai raisonnable pour analyser et corriger avant toute divulgation publique
 
-Ces délais sont indicatifs et peuvent varier selon la gravité, la reproductibilité et la disponibilité des mainteneurs.
+## Bonnes pratiques pour un signalement responsable
 
----
+- Ne pas exploiter la faille au-delà de ce qui est nécessaire pour la démontrer
+- Ne pas accéder, modifier ou exfiltrer des données réelles
+- Ne pas perturber les services (DoS, spam, accès persistant non autorisé)
+- Ne pas publier de secrets, sessions WhatsApp, tokens ou informations personnelles
 
-## 🤝 Engagement de confidentialité et divulgation responsable
-
-- Nous traiterons votre signalement de manière **confidentielle** et limiterons le partage des détails aux personnes impliquées dans l’analyse/correction.
-- Nous vous demandons de pratiquer la **divulgation responsable** : laissez-nous un délai raisonnable pour corriger la vulnérabilité avant toute divulgation publique.
-- Merci d’éviter toute action pouvant nuire aux utilisateurs ou aux services (exfiltration de données, déni de service, accès non autorisé persistant, spam).
-- Lorsqu’un correctif est disponible, nous pourrons publier une note de sécurité/changelog avec le niveau de détail approprié.
-
----
-
-## 🔎 Périmètre (à titre indicatif)
-
-Peuvent notamment être concernés :
-- Le bot et ses handlers/commandes/protections
-- Les mécanismes d’appairage/session et la gestion des accès
-- Les composants web/API exposés (CORS, auth, validation, etc.)
-- Les dépendances et la chaîne d’exécution
-
-Les comportements dépendant des limites/risques intrinsèques des plateformes tierces (ex. restrictions WhatsApp/Baileys) ne constituent pas nécessairement une vulnérabilité du projet, mais peuvent être signalés si vous identifiez un risque évitable côté DJOUSSE TECH MD.
-
----
-
-Merci de contribuer à rendre **DJOUSSE TECH MD** plus sûr pour tous. 🙏
+Merci pour votre aide et votre vigilance 🙏
