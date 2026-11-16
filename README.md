@@ -176,6 +176,9 @@ node index.js
 
 Au démarrage, suivez les instructions dans le terminal pour la connexion/appairage WhatsApp (selon le mode configuré). Les sessions et données locales sont stockées dans les dossiers prévus par la configuration (ex. `storage/`, `sessions/`, selon votre setup).
 
+> ⚠️ **Une seule instance à la fois.** Le bot pose un verrou (`storage/bot.lock`) au démarrage. Si une autre instance tourne déjà, la nouvelle s’arrête immédiatement avec un message explicite. Cela évite la boucle WhatsApp `440` et l’erreur `EADDRINUSE` sur le port `3001`. Ne lancez pas `npm start` dans un second terminal si le bot tourne déjà.
+
+
 ---
 
 ## 🌐 Site web & jumelage (Vercel + backend local)

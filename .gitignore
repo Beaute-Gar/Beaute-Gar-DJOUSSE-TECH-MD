@@ -47,6 +47,7 @@ storage/backups/
 storage/database/
 storage/downloads/
 storage/antidelete/
+storage/bot.lock
 data/
 logs/
 tmp/

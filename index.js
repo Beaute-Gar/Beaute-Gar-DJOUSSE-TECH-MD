@@ -37,6 +37,48 @@ const SESSIONS_DIR = path.join(paths.storage, 'sessions');
 });
 if (!fs.existsSync(SESSIONS_DIR)) fs.mkdirSync(SESSIONS_DIR, { recursive: true });
 
+const LOCK_FILE = path.join(paths.storage, 'bot.lock');
+
+function isProcessAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    return Boolean(err && err.code === 'EPERM');
+  }
+}
+
+/**
+ * Empeche deux instances simultanees : deux sockets sur la meme session
+ * provoquent la boucle WhatsApp 440 et le conflit EADDRINUSE sur le port 3001.
+ */
+function acquireInstanceLock() {
+  try {
+    if (fs.existsSync(LOCK_FILE)) {
+      const owner = Number.parseInt(fs.readFileSync(LOCK_FILE, 'utf8').trim(), 10);
+      if (owner && owner !== process.pid && isProcessAlive(owner)) {
+        console.log(style.renderError([
+          `Une autre instance du bot tourne deja (PID ${owner}).`,
+          'Arrete-la avant de relancer : deux instances provoquent la boucle WhatsApp 440.'
+        ]));
+        process.exit(1);
+      }
+    }
+
+    fs.writeFileSync(LOCK_FILE, String(process.pid), 'utf8');
+    process.on('exit', () => {
+      try {
+        if (!fs.existsSync(LOCK_FILE)) return;
+        const owner = Number.parseInt(fs.readFileSync(LOCK_FILE, 'utf8').trim(), 10);
+        if (owner === process.pid) fs.unlinkSync(LOCK_FILE);
+      } catch (_) {}
+    });
+  } catch (err) {
+    console.error('[lock] Impossible de verifier l instance unique :', err.message);
+  }
+}
+
 const activeSockets = new Map();
 
 /**
@@ -497,6 +539,7 @@ function startPairingServer() {
 
 // --- GESTIONNAIRE DE SESSIONS AU DEMARRAGE ---
 async function startBot() {
+  acquireInstanceLock();
   await installLogger({ dir: path.join(paths.storage, 'logs'), keepDays: 14 });
   try { setConnectedOwners([]); } catch (_) {}
 
