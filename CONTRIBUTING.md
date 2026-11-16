@@ -1,107 +1,67 @@
 # 🤝 Contribuer à DJOUSSE TECH MD
 
-Merci de votre intérêt pour **DJOUSSE TECH MD** — bot WhatsApp multi-device basé sur **Baileys**, développé par **DJOUSSE TECH** (Owner : **BeauteGar**).  
-Vos contributions (corrections, idées, documentation, améliorations) sont les bienvenues.
+Merci de ton intérêt pour **DJOUSSE TECH MD** 💙💜  
+Ce dépôt est maintenu avec soin : pour protéger le projet, les contributions suivent un cadre clair, simple et bienveillant.
 
----
+> ⭐ **Avant de forker ou cloner**, pense à laisser une étoile au dépôt si le projet t’aide : ça m’aide énormément (c’est une invitation, pas une obligation).
 
-## 📋 Avant de commencer
+## Comment contribuer
 
-- Consultez le [README](./README.md) et les documents du dépôt pour comprendre le projet.
-- Vérifiez les [Issues](https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/issues) et [Discussions](https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions) pour éviter les doublons.
-- Pour une faille de sécurité, **n’ouvrez pas d’issue publique** : suivez [SECURITY.md](./SECURITY.md).
-- Respectez le [Code de conduite](./CODE_OF_CONDUCT.md).
+### a) Travail personnel : passe par un fork
+- Tout travail personnel, expérimentation ou adaptation doit se faire dans **ton fork**.
+- Tu peux librement modifier ton fork pour ton usage personnel, dans le respect de la licence et des règles applicables.
 
----
+### b) Les Pull Requests sont désactivées sur ce dépôt
+- **Les Pull Requests sont désactivées** sur `Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD`.
+- Les forks ne peuvent donc pas envoyer de PR directement vers ce dépôt.
 
-## 🧰 Prérequis
+### c) Proposer une amélioration : ouvre une Discussion
+- Pour proposer une idée, une amélioration, une question ou un retour : ouvre une **Discussion** dans l’onglet Discussions :  
+  https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions
+- Si ta proposition est pertinente, **je peux t’inviter comme collaborateur** pour travailler ensemble sur le dépôt.
 
-- **Git**
-- **Node.js ≥ 22** (recommandé, selon le projet)
-- **npm**
-- Un environnement de test adapté (sans exposer de données sensibles/sessions)
+### d) Une étoile avant de forker (encouragé)
+- Si tu fork le projet, laisser une étoile ⭐ au dépôt principal est fortement encouragé — ça soutient le projet et sa visibilité.
 
----
+### e) Règles de respect et de bonne conduite (obligatoires)
 
-## 🚀 Installer et lancer en local
+En participant à la communauté (Discussions, échanges, suggestions, tests), tu t’engages à :
 
-```bash
-# 1) Cloner le dépôt
-git clone https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD.git
-cd Beaute-Gar-DJOUSSE-TECH-MD
+- **Respecter les autres** : pas de harcèlement, pas d’insultes, pas d’attaques personnelles, pas de discrimination.
+- **Pas de spam** : pas de publicité abusive, pas de messages répétés, pas de contenu hors sujet.
+- **Usage responsable du bot** : pas d’utilisation du bot pour du **spam** ou du **harcèlement** sur WhatsApp, ni pour toute activité abusive.
+- **Respecter les règles et conditions de WhatsApp** : l’utilisation du bot doit respecter les conditions d’utilisation de WhatsApp/Meta et les lois applicables.
+- **Respecter la vie privée et la sécurité** : ne partage pas de données personnelles, numéros, sessions, tokens, clés ou informations sensibles.
 
-# 2) Installer les dépendances
-npm install
+Le non-respect de ces règles peut entraîner la suppression de contenus, la limitation de participation ou d’autres mesures de modération.
 
-# 3) Configurer l'environnement (ne jamais committer .env ni les sessions)
-# Copier/adapter .env.example si présent, puis renseigner les variables nécessaires
+### f) Synchroniser ton fork avec le dépôt principal
 
-# 4) Lancer le bot
-node index.js
-```
-
-> ⚠️ Ne commitez jamais `.env`, tokens, clés API, sessions WhatsApp, sauvegardes ou données personnelles.
-
----
-
-## 🌿 Créer une branche
-
-Travaillez toujours sur une branche dédiée à partir de `main` :
+Pour garder ton fork à jour avec `main` :
 
 ```bash
+# 1) (Une seule fois) Ajouter le dépôt principal comme remote "upstream"
+git remote add upstream https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD.git
+
+# 2) Récupérer les dernières modifications du dépôt principal
+git fetch upstream
+
+# 3) Te placer sur ta branche main locale
 git checkout main
-git pull origin main
-git checkout -b feat/ma-fonctionnalite
-# ou fix/correction-bug, docs/mise-a-jour, chore/...
+
+# 4) Fusionner les changements de upstream/main
+git merge upstream/main
+
+# 5) Pousser la mise à jour sur ton fork
+git push origin main
 ```
 
-**Conventions suggérées :**
-- `feat/...` nouvelle fonctionnalité
-- `fix/...` correction de bug
-- `docs/...` documentation
-- `refactor/...` refactorisation sans changement fonctionnel
-- `chore/...` maintenance/outillage
+> Si tu travailles sur une autre branche, mets d’abord `main` à jour puis fusionne/rebase ta branche selon ton workflow.
 
----
+## Besoin d’aide ou d’échange ?
 
-## ✅ Règles de contribution
+- 💬 Discussions : https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions
+- 🔐 Sécurité (failles) : consulte [SECURITY.md](./SECURITY.md)
+- 📜 Code de conduite : consulte [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
 
-- **Respect & bienveillance** : échanges constructifs, pas de harcèlement.
-- **Code propre** : changements ciblés, lisibles, cohérents avec le style existant.
-- **Pas de secrets** : aucun token, clé, numéro sensible ou session dans le code/commits.
-- **Pas de régression** : ne cassez pas les fonctionnalités existantes (commandes, protections, appairage, web).
-- **Documentation** : mettez à jour README/docs si le comportement ou la config change.
-- **Tests/vérifications** : testez vos changements localement quand c’est possible (scénarios pertinents, commandes impactées).
-
----
-
-## 🔁 Soumettre une Pull Request
-
-1. **Commitez** des changements clairs et atomiques.
-2. **Poussez** votre branche :
-   ```bash
-   git push origin feat/ma-fonctionnalite
-   ```
-3. **Ouvrez une Pull Request** vers `main` en remplissant le modèle fourni.
-4. Décrivez : le problème, la solution, les impacts, et comment tester.
-5. Répondez aux retours de revue si nécessaire.
-
-### Checklist PR (recommandée)
-- [ ] Le changement est testé localement
-- [ ] Aucun secret / donnée sensible ajouté
-- [ ] Le code respecte le style du projet
-- [ ] La documentation est mise à jour si nécessaire
-- [ ] Les cas limites pertinents sont pris en compte
-
----
-
-## 🐞 Signaler un bug / proposer une idée
-
-- **Bug** : ouvrez une [issue Bug](https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/issues/new/choose)
-- **Fonctionnalité** : ouvrez une [issue Feature](https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/issues/new/choose)
-- **Question / échange** : utilisez les [Discussions](https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/discussions)
-
----
-
-Merci pour votre contribution à **DJOUSSE TECH MD** 🚀  
-*Des solutions fiables pour un avenir sans limites.*
+Merci de contribuer dans le respect et la bonne humeur 🚀
