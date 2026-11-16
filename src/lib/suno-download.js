@@ -131,7 +131,26 @@ async function resolveSuno(url) {
 
   const { text: html, finalUrl } = await fetchText(input);
   const id = extractSunoId(finalUrl) || extractSunoId(input);
-  const data = extractFromHtml(html, id);
+  let data = extractFromHtml(html, id);
+
+  // Fallback: public clip metadata endpoint (no auth) for better title/artist when page parsing is incomplete
+  if (id && (!data.title || !data.artist || !Array.isArray(data.media_urls) || !data.media_urls.length)) {
+    try {
+      const clipRes = await fetch(`https://studio-api.prod.suno.com/api/clip/${id}`, {
+        headers: { 'user-agent': 'Mozilla/5.0', 'accept': 'application/json' }
+      });
+      if (clipRes.ok) {
+        const clip = await clipRes.json();
+        data = {
+          ...data,
+          title: data.title || String(clip.title || ''),
+          artist: data.artist || String(clip.display_name || ''),
+          audio_url: data.audio_url || String(clip.audio_url || ''),
+          media_urls: (Array.isArray(data.media_urls) && data.media_urls.length) ? data.media_urls : (Array.isArray(clip.media_urls) ? clip.media_urls : [])
+        };
+      }
+    } catch (e) {}
+  }
 
   let title = data.title || (id ? `Suno ${id.slice(0, 8)}` : 'Suno');
   if (data.artist && !new RegExp(data.artist.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(title)) {
