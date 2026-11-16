@@ -1,50 +1,58 @@
-# TODO — informations et actions à compléter
+# TODO_A_REMPLIR — Durcissement du dépôt
 
-Les éléments ci-dessous n’ont pas pu être renseignés ou finalisés automatiquement sans information fournie, sans accès externe, sans privilèges administrateur ou sans dépôt Git. **Aucune donnée légale, réseau ou secrète n’a été inventée.**
+Dépôt : **Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD** (branche `main`)
 
-## A. Informations obligatoires (placeholders `[A_REMPLIR]`)
+## Bloquant (outillage / accès)
 
-### Site web & identité
-- [ ] **Nom du site** : confirmer le libellé public exact (placeholder utilisé dans pages/manifest/JSON-LD).
-- [ ] **Domaine de production (https)** : remplacer `https://[A_REMPLIR]` dans `web/public` (pages, `sitemap.xml`, `robots.txt`, canonical/OG/JSON-LD) une fois le domaine connu ; configurer la redirection canonique (apex/www) dans Vercel.
-- [ ] **Email de contact** : remplacer `[A_REMPLIR]` / `[A_REMPLIR]@example.invalid` dans politique de confidentialité, CGU, mentions légales, JSON-LD.
-- [ ] **Adresse / pays de l’éditeur** : compléter mentions légales et politique de confidentialité (DJOUSSE TECH EVOLUTION).
-- [ ] **Responsable de la protection des renseignements personnels (Loi 25, Québec)** : nom, fonction, coordonnées.
+- [ ] **Installer GitHub CLI** (si absent) : https://cli.github.com/
+- [ ] **S’authentifier** : `gh auth login`
+- [ ] **Vérifier les droits admin** : `gh repo view Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD --json viewerPermission`
+- [ ] **Relire chaque réglage appliqué** via `gh api`/`gh repo view` (ne pas supposer qu’il est actif)
 
-### Infrastructure (mission front Vercel + backend local + ngrok)
-- [ ] **Domaine Vercel du front** : `[A_REMPLIR]` (ex. `ton-site.vercel.app`) et **domaine personnel** éventuel `[A_REMPLIR]` — à renseigner dans `backend/.env` (`ALLOWED_ORIGINS`), `web` (config API publique) et CORS.
-- [ ] **Port local du backend** : `[A_REMPLIR]` (non détecté ; défaut proposé `3001`) — aligner `backend/.env` (`PORT`), `ngrok.yml`, scripts `check-tunnel`/`verify-setup` et le service de démarrage.
-- [ ] **Domaine ngrok attribué (compte gratuit)** : `[A_REMPLIR]` (ex. `nom.ngrok-free.app`) — renseigner `ngrok.yml` et la variable d’URL API publique côté Vercel.
-- [ ] **Port SSH personnalisé** : `[A_REMPLIR]` (sinon choisir un port aléatoire 20000–60000 non utilisé) — `deploy/setup-ssh.ps1`, pare-feu, `sshd_config`.
-- [ ] **Utilisateur d’administration non-root** : `[A_REMPLIR]` — `AllowUsers` SSH, propriétaire des services.
-- [ ] **Clé publique SSH** : `[A_REMPLIR]` — à installer dans `authorized_keys` avant de désactiver les mots de passe.
-- [ ] **IP ou plage autorisée pour SSH (optionnel)** : `[A_REMPLIR]` — restriction pare-feu/reseau si le port doit être filtré.
-- [ ] **Email pour les alertes (fail2ban/équivalent, supervision)** : `[A_REMPLIR]` (optionnel).
+## À compléter dans les fichiers
 
-## B. Validation juridique (obligatoire avant mise en ligne)
-- [ ] Faire **valider par un juriste** : `politique-de-confidentialite.html`, `conditions-generales.html`, `mentions-legales.html` (modèles, non opposables en l’état).
-- [ ] Vérifier adéquation Loi 25 (Québec), cadre camerounais/Afrique francophone et RGPD (UE) selon activité, transferts et sous-traitants réels.
-- [ ] Confirmer durées de conservation, bases légales et procédures d’exercice des droits.
+- [ ] **`SECURITY.md`** : remplacer `[A_REMPLIR]` par l’adresse e-mail de contact sécurité (canal secondaire au signalement privé GitHub)
+- [ ] (Optionnel) Vérifier/ajuster le texte du README si vous souhaitez modifier le message d’étoile, le lien WhatsApp ou les badges
 
-## C. Sécurité, secrets et déploiement (web)
-- [ ] **Pas de dépôt Git** : impossible d’auditer l’historique. Si ce code a été poussé à distance, auditer l’historique complet (gitleaks/`git log -p`) et **révoquer/régénérer** tout secret potentiellement exposé (`PAIRING_API_TOKEN`, `SESSION_BACKUP_KEY`, clés IA/fournisseurs, sessions/credentials WhatsApp, etc.). `.env` racine présent localement : vérifier qu’il n’a jamais été publié.
-- [ ] Configurer dans Vercel (Production/Preview) : `PAIRING_API_URL` = URL HTTPS du backend local exposé via **ngrok** (ex. `https://<domaine>.ngrok-free.app`, sans slash final) pour les fonctions `/api/pair` et `/api/status`, et/ou `PUBLIC_API_URL` (même URL) pour appel direct du front ; `PAIRING_API_TOKEN` (identique au backend local) ; `SITE_ORIGIN` (= domaine de production) ; `TURNSTILE_SECRET_KEY` si anti-spam activé. **Ne pas utiliser Render comme serveur.**
-- [ ] **Cloudflare Turnstile** : créer site, renseigner clé publique côté front et `TURNSTILE_SECRET_KEY` côté serveur ; sans clés, protection partielle (honeypot + rate limiting).
-- [ ] **Redéployer** le site `web/` (projet Vercel `djousse-tech-md`) : la prod servait des données catalogue obsolètes ; vérifier `/data/commands.json` et `/api/status` après déploiement.
-- [ ] Restreindre l’indexation des **prévisualisations/staging** (noindex / `X-Robots-Tag` selon environnement).
+## Réglages GitHub à appliquer puis vérifier
 
-## D. Infrastructure — actions manuelles/privilèges (Windows)
-- [ ] Exécuter en **administrateur** les scripts `deploy/setup-ssh.ps1`, `deploy/setup-firewall.ps1`, `deploy/setup-fail2ban.ps1`, `deploy/setup-ngrok.ps1`, `deploy/setup-services.ps1` après avoir renseigné les placeholders et relu les instructions anti-verrouillage.
-- [ ] Installer et authentifier **ngrok** (`ngrok config add-authtoken <TOKEN>` via variable d’environnement/saisie sécurisée, jamais dans le dépôt), configurer le domaine fixe du plan gratuit, et activer le service/tâche de persistance.
-- [ ] **Backend local** : implémenter/câbler le service API réel sur `[A_REMPLIR:PORT]` (écoute `127.0.0.1`), compléter authentification JWT/sessions, rôles, base de données/utilisateurs et routes métier selon besoins ; le squelette `backend/` fournit la base sécurisée et `/health`.
-- [ ] Vérifier dans le tableau de bord ngrok les limites de session/trafic actuelles du plan gratuit et consigner dans `RAPPORT_FINAL.md`.
-- [ ] Sauvegardes automatiques chiffrées (données/config), rotation, **test de restauration** documenté, stockage hors machine.
-- [ ] Mises à jour de sécurité automatiques (Windows Update) et supervision/alertes (backend, tunnel, disque, mémoire) via `deploy/` / tâches planifiées.
+### Discussions
+- [ ] Activer les Discussions : `gh repo edit Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD --enable-discussions`
+- [ ] Vérifier : `gh repo view Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD --json hasDiscussionsEnabled`
+- [ ] **Manuel (UI)** : créer/ajuster les catégories **Annonces**, **Idées**, **Q&R** (Discussions → Categories)
 
-## E. Qualité, mesures et conformité continue
-- [ ] Lancer **Lighthouse** mobile/desktop après déploiement et consigner scores (objectif ≥ 90, LCP < 2,5 s, CLS < 0,1).
-- [ ] Exécuter `npm run check-links` (dans `web/`) et les tests `node web/scripts/test-api.js` ; exécuter `node backend/scripts/verify-setup.js` (ou équivalent) une fois l’infra en place.
-- [ ] Vérifier manuellement : consentement (aucun traceur avant choix), clavier/lecteur d’écran, largeurs 320/375/768/1024/1440 px, CORS refusé pour origine inconnue.
-- [ ] Initialiser Git, créer la branche demandée, commits atomiques, activer `.github/workflows/ci.yml`.
-- [ ] Si envoi d’e-mails ajouté : configurer **SPF, DKIM, DMARC**.
-- [ ] Traiter les vulnérabilités npm racine restantes sans casser le build (tests fonctionnels bot).
+### Sécurité
+- [ ] Activer le **signalement privé de vulnérabilités** (private vulnerability reporting) + relire
+- [ ] Activer **Secret scanning** + relire
+- [ ] Activer **Push protection** (secret scanning) + relire
+- [ ] Activer les **alertes Dependabot** + relire
+- [ ] **Ne pas** activer les mises à jour automatiques de version Dependabot (créent des PR)
+
+### Protection de `main`
+- [ ] Créer un **ruleset** ciblant `~DEFAULT_BRANCH` : règles `deletion` + `non_fast_forward`, enforcement `active`, bypass rôle Repository admin (permet au mainteneur de pousser) ; **sans** approbation obligatoire / **sans** require PR
+- [ ] Relire le ruleset : `gh api repos/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/rulesets` puis détail du ruleset
+- [ ] Si ruleset indisponible : appliquer la protection de branche classique (`allow_force_pushes=false`, `allow_deletions=false`, `enforce_admins=false`, pas de review/PR requise) ou config manuelle UI
+
+### Pull Requests (à faire EN DERNIER)
+- [ ] Désactiver entièrement les Pull Requests (chercher/appliquer le champ API documenté, ex. `has_pull_requests=false`, puis relire)
+- [ ] Si l’API ne le permet pas : **désactiver via UI** (Settings → General → Features → décocher *Pull requests*)
+- [ ] Vérifier que `.../pulls` ne permet plus d’ouvrir une PR
+- [ ] (Alternative) Choisir “limiter aux collaborateurs” si vous souhaitez garder l’onglet PR ouvert pour vous/collaborateurs invités
+
+### Options du dépôt
+- [ ] Activer *Automatically delete head branches* (`--delete-branch-on-merge`)
+- [ ] Désactiver **Wikis** et **Projects** si inutilisés
+- [ ] Confirmer que les **forks restent autorisés** (dépôt public)
+
+## Sécurité opérationnelle (urgent si applicable)
+
+- [ ] **Révoquer/faire tourner** les clés/tokens API potentiellement exposés ou sensibles (IA, services tiers, tokens de jumelage, ngrok, etc.)
+- [ ] **Déconnecter les appareils/sessions WhatsApp** liés aux credentials/sauvegardes exposées, puis réappairer proprement
+- [ ] Examiner les sauvegardes `storage/backups/*.creds.enc` **précédemment suivies dans l’historique Git** : considérer un **nettoyage d’historique** (ex. `git filter-repo`) pour suppression définitive du remote/historique — **à demander explicitement avant toute réécriture d’historique**
+- [ ] Après nettoyage d’historique (si fait) : rotation complète des sessions/clés concernées et invalidation des accès anciens
+
+## Vérifications finales
+
+- [ ] Checklist relue par API : PR, Discussions, ruleset/protection, signalement privé, secret scanning, push protection, alertes Dependabot
+- [ ] Test sans risque : force-push refusé sur branche protégée / `main` protégé, suppression refusée, PR non ouvrable (si désactivées), issues vierges bloquées
+- [ ] Mettre à jour `RAPPORT_FINAL.md` avec les résultats réels après application des réglages
