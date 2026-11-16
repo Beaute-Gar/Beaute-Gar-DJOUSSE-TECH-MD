@@ -377,7 +377,7 @@ module.exports = {
         return sock.sendMessage(from, { text: style.renderInfo(['Aucun match de football trouvé aujourd\'hui.']) }, { quoted: m });
       }
 
-      if (['ticket', 'coupon', 'combo', 'pari', 'paris', 'bet'].includes(sub)) {
+      if (sub === '' || ['ticket', 'coupon', 'combo', 'pari', 'paris', 'bet'].includes(sub)) {
         const opts = parseTicketArgs(a);
         let pool = matches.filter(mt => !(mt.live && (mt.live.cancelled || mt.live.finished)));
         if (opts.liveOnly) {
@@ -493,6 +493,8 @@ module.exports = {
 
       if (sub === 'all' || sub === 'tout' || sub === 'tous') {
         showAll = true;
+      } else if (sub === 'list' || sub === 'liste' || sub === 'matchs' || sub === 'matches') {
+        // Liste paginée classique (comportement historique de .promo).
       } else if (sub === 'live' || sub === 'encours' || sub === 'en-cours' || sub === 'direct') {
         const liveToday = matches.filter(x => x.live && x.live.started && !x.live.finished);
         if (liveToday.length) {
@@ -572,6 +574,7 @@ module.exports = {
       }
       lines.push(style.row('🏦 = cotes bookmakers • ≈ = cotes équitables'));
       lines.push(style.row('1 = domicile • X = nul • 2 = extérieur • 💎 = value bet'));
+      lines.push(style.row('.promo = ticket • .promo list = liste des matchs'));
       lines.push(style.row('.promo ticket [n] [mise] • .promo ticket safe'));
       lines.push(style.row('.promo all | .promo live | .promo books | .promo value'));
       lines.push(style.row('.promo compare <équipe> <1> <X> <2>'));
