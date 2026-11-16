@@ -20,7 +20,7 @@ Merci d’aider à protéger **DJOUSSE TECH MD** et ses utilisateurs. Ce projet 
 
 1. **Signalement privé de vulnérabilités GitHub (prioritaire)** :  
    https://github.com/Beaute-Gar/Beaute-Gar-DJOUSSE-TECH-MD/security/advisories/new
-2. **E-mail (si le canal GitHub n’est pas disponible)** : **[A_REMPLIR]**
+2. **Canal alternatif (si le signalement GitHub n’est pas disponible)** : [Groupe WhatsApp officiel](https://chat.whatsapp.com/CSlUZvOaPYo8m9S7zjHfNM) (merci de ne pas partager de détails sensibles publiquement ; demandez un contact privé pour transmettre un rapport)
 
 ### Ce qu’il faut inclure dans le rapport
 
