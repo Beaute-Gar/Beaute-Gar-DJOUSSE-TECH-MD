@@ -139,6 +139,15 @@ async function startSession(sessionName) {
           console.error('[jeux] arret de session impossible :', e.message);
         }
         groupOwner.releaseSession(sessionKey(sock, sessionName), 'deconnexion definitive');
+
+        // Session deconnectee/expiree : on supprime les identifiants devenus invalides
+        // pour qu'une nouvelle demande de code reparte sur une base propre.
+        if (loggedOut) {
+          try {
+            fs.rmSync(sessionPath, { recursive: true, force: true });
+            console.log(`[${sessionName}] Session locale supprimee (deconnexion definitive).`);
+          } catch (e) {}
+        }
       }
     }
 

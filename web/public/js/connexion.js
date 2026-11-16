@@ -13,8 +13,49 @@ const copyCode = document.querySelector('[data-copy-pair-code]');
 const statusCount = document.querySelector('[data-status-connection]');
 const phoneError = document.querySelector('[data-phone-error]');
 const consentError = document.querySelector('[data-consent-error]');
+const countdownEl = document.querySelector('[data-code-countdown]');
 let statusTimer;
 let controller;
+let codeTimer;
+let codeExpiresAt = 0;
+
+function clearCodeTimer() {
+  if (codeTimer) {
+    window.clearTimeout(codeTimer);
+    codeTimer = 0;
+  }
+}
+
+function resetCodeDisplay(message) {
+  clearCodeTimer();
+  codeExpiresAt = 0;
+  if (codeBox) codeBox.textContent = '••••  ••••';
+  if (copyCode) copyCode.hidden = true;
+  if (countdownEl) countdownEl.textContent = '60 secondes';
+  if (message) setMessage(message, 'error');
+}
+
+function startCodeCountdown(seconds = 60) {
+  clearCodeTimer();
+  codeExpiresAt = Date.now() + seconds * 1000;
+  if (copyCode) copyCode.hidden = false;
+
+  function tick() {
+    const remaining = Math.max(0, Math.ceil((codeExpiresAt - Date.now()) / 1000));
+    if (countdownEl) countdownEl.textContent = remaining > 0 ? `${remaining} seconde${remaining > 1 ? 's' : ''}` : 'expiré';
+    if (remaining <= 0) {
+      clearCodeTimer();
+      codeExpiresAt = 0;
+      if (codeBox) codeBox.textContent = '••••  ••••';
+      if (copyCode) copyCode.hidden = true;
+      setMessage('Code expiré. Clique à nouveau sur « Obtenir mon code » et saisis-le immédiatement dans WhatsApp.', 'error');
+      return;
+    }
+    codeTimer = window.setTimeout(tick, 250);
+  }
+
+  tick();
+}
 
 function formatPhoneNumber(value, countryCode) {
   const digits = String(value || '').replace(/\D/g, '');
@@ -93,6 +134,7 @@ function validate() {
 async function copyPairCode() {
   const value = String(codeBox?.textContent || '').replace(/\s+/g, '');
   if (!value || value.includes('•')) return setMessage('Demande d’abord un code de jumelage.', 'error');
+  if (!codeExpiresAt || Date.now() >= codeExpiresAt) return setMessage('Ce code a expiré. Demande-en un nouveau.', 'error');
   try {
     await navigator.clipboard.writeText(value);
     setMessage('Code copié. Ouvre WhatsApp pour l’associer.', 'success');
@@ -114,6 +156,10 @@ form?.addEventListener('submit', async (event) => {
 
   controller?.abort();
   controller = new AbortController();
+  clearCodeTimer();
+  codeExpiresAt = 0;
+  if (copyCode) copyCode.hidden = true;
+  if (codeBox) codeBox.textContent = '••••  ••••';
   setBusy(true);
   setMessage('Demande du code de jumelage en cours…', 'info');
   try {
@@ -122,11 +168,12 @@ form?.addEventListener('submit', async (event) => {
     if (turnstile && turnstile.value) payload.turnstileToken = turnstile.value;
     const result = await getPairingCode(payload, { signal: controller.signal });
     if (codeBox) codeBox.textContent = result.code || '— — — —';
-    setMessage('Code reçu. Ouvre WhatsApp > Appareils connectés > Associer avec un numéro.', 'success');
+    startCodeCountdown(60);
+    setMessage(`Code reçu pour +${full}. Ouvre WhatsApp > Appareils connectés > Associer avec un numéro, puis saisis-le immédiatement (valable 60 s).`, 'success');
     document.dispatchEvent(new CustomEvent('djousse:form-success', { detail: { form: 'pairing' } }));
   } catch (error) {
     if (error?.name === 'AbortError') return;
-    if (codeBox) codeBox.textContent = '• • • •  • • • •';
+    resetCodeDisplay('');
     const text = error instanceof ApiError ? error.message : 'Service de jumelage indisponible pour le moment.';
     const state = error instanceof ApiError && (error.kind === 'validation' || error.kind === 'session' || error.kind === 'rate-limit') ? 'error' : 'info';
     setMessage(text, state);

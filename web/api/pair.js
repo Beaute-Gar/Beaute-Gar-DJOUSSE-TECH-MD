@@ -158,7 +158,9 @@ module.exports = async function pair(req, res) {
   }
 
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 12000);
+  // Le backend peut attendre la création du socket puis demander le code.
+  // On laisse une marge suffisante pour éviter les faux "service indisponible".
+  const timer = setTimeout(() => controller.abort(), 30000);
 
   try {
     const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json', 'x-api-token': apiToken };

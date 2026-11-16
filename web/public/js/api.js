@@ -37,11 +37,13 @@ function wait(ms, signal) {
   });
 }
 
-async function request(path, { method = 'GET', body, signal, retries } = {}) {
+async function request(path, { method = 'GET', body, signal, retries, timeoutMs: customTimeout } = {}) {
   const targetUrl = buildUrl(path);
   const base = apiBase();
   const maxRetries = typeof retries === 'number' ? retries : (typeof window !== 'undefined' && typeof window.DJS_API_RETRIES === 'number' ? window.DJS_API_RETRIES : 2);
-  const timeoutMs = typeof window !== 'undefined' && window.DJS_API_TIMEOUT_MS ? Number(window.DJS_API_TIMEOUT_MS) : 12000;
+  const timeoutMs = typeof customTimeout === 'number'
+    ? customTimeout
+    : (typeof window !== 'undefined' && window.DJS_API_TIMEOUT_MS ? Number(window.DJS_API_TIMEOUT_MS) : 12000);
 
   const headers = {
     'Content-Type': 'application/json',
@@ -129,7 +131,9 @@ export async function getPairingCode(payloadOrNumber, { signal } = {}) {
   if (body.phone) body.phone = String(body.phone).replace(/\D/g, '');
   if (body.number && !body.phone) { body.phone = String(body.number).replace(/\D/g, ''); delete body.number; }
 
-  const result = await request('/api/pair', { method: 'POST', body, signal });
+  // Important : ne pas réessayer automatiquement une demande de code.
+  // Chaque requête peut générer un nouveau code et invalider le précédent.
+  const result = await request('/api/pair', { method: 'POST', body, signal, retries: 0, timeoutMs: 30000 });
   const code = String(result?.code || '').replace(/[\s-]+/g, '').toUpperCase();
   if (!code) throw new ApiError('Le serveur a répondu sans code de jumelage valide.', 0, 'unavailable');
   return { code, raw: result };
