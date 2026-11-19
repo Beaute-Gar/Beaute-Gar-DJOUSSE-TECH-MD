@@ -1,14 +1,19 @@
 ﻿'use strict';
 const style = require('../../config/style');
 const { downloadMediaMessage } = require('@whiskeysockets/baileys');
-const { Jimp } = require('jimp'); // <-- Correction ici
 const QrCode = require('qrcode-reader');
+
+let Jimp;
+try { const jimp = require('jimp'); Jimp = jimp.Jimp || jimp; } catch (e) { /* retire en mobile */ }
 
 module.exports = {
   name: 'readqr',
   category: 'sticker-media',
   description: 'Lit un QR code depuis une image',
   async execute(sock, m, from) {
+    if (!Jimp) {
+      return sock.sendMessage(from, { text: style.renderError(['Indisponible sur la version mobile.']) });
+    }
     const quoted = m.message?.extendedTextMessage?.contextInfo?.quotedMessage;
     const isImage = m.message?.imageMessage || quoted?.imageMessage;
     

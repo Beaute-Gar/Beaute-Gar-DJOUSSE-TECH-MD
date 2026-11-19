@@ -48,4 +48,17 @@ function gate({ mode, isOwner, isGroup, isAdmin, isBotAdmin, cmd }) {
   return { action, reason };
 }
 
-module.exports = { gate };
+function deniedText(reason, number) {
+  const messages = {
+    ownerOnly: `⛔ Cette commande est réservée au propriétaire du bot.`,
+    adminOnly: `⛔ Cette commande est réservée aux administrateurs du groupe.`,
+    botAdmin: `⛔ Le bot doit être administrateur du groupe pour cette commande.`,
+    groupOnly: `⛔ Cette commande ne fonctionne que dans un groupe.`,
+    privateOnly: `⛔ Cette commande ne fonctionne qu'en conversation privée.`,
+    selfMode: `🔇 Cette session est en mode .self, elle ignore les commandes des autres.`,
+    unknown: `⛔ Accès refusé à cette commande.`
+  };
+  return messages[reason] || messages.unknown;
+}
+
+module.exports = { gate, deniedText };

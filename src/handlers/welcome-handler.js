@@ -9,7 +9,9 @@ let drawWelcomeCard = null;
 try {
   const canvasLib = require('catozolala-card-canvas');
   drawWelcomeCard = canvasLib.drawWelcomeCard;
-} catch (e) {}
+} catch (e) {
+  // Module retire en version mobile - fallback texte utilise
+}
 
 const DEFAULT_AVATAR = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
 const DEFAULT_BG = 'https://i.ibb.co/Ccg2ctT/background.png';

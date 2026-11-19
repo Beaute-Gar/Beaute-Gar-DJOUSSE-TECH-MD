@@ -13,7 +13,8 @@ try { ytSearch = require('yt-search'); } catch (e) {}
 let ytdlLib = null;
 function getYtdl() {
   if (ytdlLib) return ytdlLib;
-  const mod = require('@distube/ytdl-core');
+  let mod;
+  try { mod = require('@distube/ytdl-core'); } catch (e) { throw new Error('Module YouTube indisponible sur mobile'); }
   if (mod && typeof mod.Ytdl === 'function') {
     ytdlLib = new mod.Ytdl();
     ytdlLib._Quality = mod.Quality;

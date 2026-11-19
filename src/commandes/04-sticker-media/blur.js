@@ -1,13 +1,18 @@
 ﻿'use strict';
 const style = require('../../config/style');
 const { downloadMediaMessage } = require('@whiskeysockets/baileys');
-const sharp = require('sharp');
+
+let sharp;
+try { sharp = require('sharp'); } catch (e) { /* retire en mobile */ }
 
 module.exports = {
   name: 'blur',
   category: 'sticker-media',
   description: 'Floute une image',
   async execute(sock, m, from) {
+    if (!sharp) {
+      return sock.sendMessage(from, { text: style.renderError(['Indisponible sur la version mobile.']) });
+    }
     const quoted = m.message?.extendedTextMessage?.contextInfo?.quotedMessage;
     const isImage = m.message?.imageMessage || quoted?.imageMessage;
     

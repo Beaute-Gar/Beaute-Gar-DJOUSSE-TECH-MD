@@ -2,7 +2,10 @@
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
+const MOBILE = process.env.MOBILE === '1';
+
 module.exports = {
+  MOBILE: MOBILE,
   botName:     process.env.BOT_NAME     || 'DJOUSSE TECH MD',
   prefix:      process.env.PREFIX       || '.',
   ownerNumber: process.env.OWNER_NUMBER || '',

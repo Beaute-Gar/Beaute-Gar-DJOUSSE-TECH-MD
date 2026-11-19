@@ -1,0 +1,15 @@
+{
+  "entry": [
+    "index.js",
+    "ecosystem.config.cjs",
+    "src/commandes/**/*.js",
+    "src/jeux/*/index.js",
+    "scripts/*.js",
+    "backend/src/server.js",
+    "backend/scripts/*.js",
+    "web/api/*.js",
+    "web/scripts/*.js",
+    "web/public/js/*.js"
+  ],
+  "project": ["src/**/*.js", "backend/**/*.js", "web/**/*.js"]
+}

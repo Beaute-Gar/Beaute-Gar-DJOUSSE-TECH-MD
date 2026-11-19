@@ -6,9 +6,11 @@
  *  - video  : ffmpeg, webp anime, 6 s max, 15 i/s
  */
 
-const sharp = require('sharp');
+let sharp;
+try { sharp = require('sharp'); } catch (e) { /* retire en mobile */ }
 const { spawn } = require('child_process');
-const ffmpegPath = require('ffmpeg-static');
+let ffmpegPath;
+try { ffmpegPath = require('ffmpeg-static'); } catch (e) { /* retire en mobile */ }
 
 const SIZE = 512;
 const MAX_SECONDS = 6;

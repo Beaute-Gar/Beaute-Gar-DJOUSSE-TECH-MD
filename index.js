@@ -62,7 +62,7 @@ function acquireInstanceLock() {
           `Une autre instance du bot tourne deja (PID ${owner}).`,
           'Arrete-la avant de relancer : deux instances provoquent la boucle WhatsApp 440.'
         ]));
-        process.exit(1);
+        if (process.env.MOBILE !== '1') process.exit(1);
       }
     }
 
@@ -126,6 +126,11 @@ async function startSession(sessionName) {
       }
     }
   });
+
+  // P2 : Brancher le jumelage mobile si mode mobile
+  if (process.env.MOBILE === '1' && globalThis.__DJOUSSE_MOBILE__) {
+    globalThis.__DJOUSSE_MOBILE__.attach(sock);
+  }
 
   // Anti-ban : ralentit chaque envoi (delai + « ecrit... » + quota/minute).
   // Desactivable via HUMANIZE=false dans .env
@@ -514,6 +519,10 @@ function startPairingServer() {
           return sendJson(res, 409, { error: 'Cette session est déjà jumelée.' });
         }
 
+        // P3 : En mode mobile, le jumelage passe par le canal capacitor-nodejs
+        if (process.env.MOBILE === '1') {
+          return sendJson(res, 403, { error: 'Jumelage mobile desactive sur ce canal. Utilisez l\'APK.' });
+        }
         const code = await sock.requestPairingCode(number);
         console.log(style.renderSuccess([`[pair-api] Code d'appairage ${number} : ${code}`]));
         return sendJson(res, 200, { code: String(code) });
@@ -583,7 +592,7 @@ async function startBot() {
   });
 
   // API HTTP locale (pairing/status) pour exposition via ngrok
-  startPairingServer();
+  if (process.env.MOBILE !== '1') startPairingServer();
 
   // Sauvegarde chiffree des sessions (cle : SESSION_BACKUP_KEY)
   const backupDir = path.join(paths.storage, 'backups');
@@ -644,7 +653,7 @@ async function startBot() {
 
     // Demande du code d'appairage
     const sock = activeSockets.get(number);
-    if (sock && !sock.authState.creds.registered) {
+    if (sock && !sock.authState.creds.registered && process.env.MOBILE !== '1') {
       setTimeout(async () => {
         try {
           const code = await sock.requestPairingCode(number);
@@ -660,6 +669,6 @@ async function startBot() {
 
 startBot().catch((err) => {
   console.log(style.renderError([`Fatal : ${err.message}`]));
-  process.exit(1);
+  if (process.env.MOBILE !== '1') process.exit(1);
 });
 

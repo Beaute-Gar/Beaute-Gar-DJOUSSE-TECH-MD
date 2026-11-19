@@ -1,11 +1,13 @@
 ﻿'use strict';
-const { normalizeMessageContent } = require('@whisockets/baileys');
+const { normalizeMessageContent } = require('@whiskeysockets/baileys');
 const { resolveSender, botIdentities } = require('../lib/sender');
 const { getGroupMeta, bindInvalidation, isAdminOf } = require('../lib/group-cache');
 const { getMode } = require('../lib/session-mode');
 const { claim, sessionOwning } = require('../lib/dedupe');
 const { gate, deniedText } = require('../lib/gate');
-const { findCommand } = require('../command-loader');
+const { find: findCommand } = require('./command-handler');
+const config = require('../config/config');
+const style = require('../config/style');
 
 const TTL = 120_000;
 const sentIds = new Set(); // anti-boucle : IDs des messages envoyés par le bot
@@ -42,9 +44,8 @@ function extractText(msg) {
 // ─────────────────────────────────────────────────────────────────────────────
 // Écouteur principal de messages entrants
 // ─────────────────────────────────────────────────────────────────────────────
-async function onMessage(sock, sessionId, msg, config) {
-  const find = config.findCommand || findCommand;   // injectables pour les tests
-  const modeOf = config.modeOf || getMode;
+async function onMessage(sock, sessionId, msg) {
+  const modeOf = getMode;
 
   // 1. Filtres de base
   if (!msg?.message || msg.key.remoteJid === 'status@broadcast') return;
@@ -63,7 +64,7 @@ async function onMessage(sock, sessionId, msg, config) {
   const ownerSession = sessionOwning(sender.ids);
   if (ownerSession && ownerSession !== sessionId) return;
   const isSessionOwner = sender.isFromMe || ownerSession === sessionId;
-  const isOwner = isSessionOwner || (config.owners || []).includes(sender.number);
+  const isOwner = isSessionOwner || (config.ownerNumber && String(sender.number).includes(config.ownerNumber));
 
   // 3. ✅ .self : mode volontaire - protections activées pour cette session seulement
   // Si mode .self, protections activées pour le propriétaire de cette session ONLY
@@ -78,6 +79,16 @@ async function onMessage(sock, sessionId, msg, config) {
   if (handled.has(dupKey)) return;
   remember(handled, dupKey);
   if (!claim(sender.chatJid, msg.key.id, sessionId)) return;
+
+  // 4bis. ✅ Extraction du nom de commande et des arguments
+  const body = text.slice(config.prefix.length).trim();
+  if (!body) return;
+  const [rawName, ...args] = body.split(/\s+/);
+  const command = findCommand(rawName);
+  if (!command) {
+    await sock.sendMessage(sender.chatJid, { text: style.renderError([`Commande inconnue : *${config.prefix}${rawName}*. Tapez *${config.prefix}menu*`]), mentions: [sender.jid] }, { quoted: msg });
+    return;
+  }
 
   // 5. ✅ Statut admin (groupe uniquement, et seulement si nécessaire)
   let meta = null, isAdmin = false, isBotAdmin = false;
@@ -95,18 +106,18 @@ async function onMessage(sock, sessionId, msg, config) {
     sock.sendMessage(sender.chatJid, { text: t, mentions: [sender.jid], ...extra }, { quoted: msg });
 
   if (decision.action === 'ignore') return;
-  if (decision.action === 'deny') return reply(deniedText(decision.reason, sender.number));
+  if (decision.action === 'deny') return reply(style.renderError([deniedText(decision.reason, sender.number)]));
 
-  // 7. Exécution de la commande
+  // 7. Exécution de la commande (signature réelle : sock, msg, from, args)
   try {
-    await command.execute({ sock, msg, sender, args, text: args.join(' '), reply, meta, isAdmin, isBotAdmin, isOwner, sessionId, mode });
+    await command.execute(sock, msg, sender.chatJid, args);
   } catch (e) {
     console.error(`[CMD] erreur dans ${rawName}:`, e);
-    await sock.sendMessage(sender.chatJid, { text: `❌ Une erreur est survenue dans la commande *${rawName}*.`, mentions: [sender.jid] }, { quoted: msg });
+    await sock.sendMessage(sender.chatJid, { text: style.renderError([`Une erreur est survenue dans la commande *${rawName}*.`]), mentions: [sender.jid] }, { quoted: msg });
   }
 }
 
-function attachHandler(sock, sessionId, config) {
+function attachHandler(sock, sessionId) {
   if (sock.__djHandlerAttached) return; // évite un double branchement
   sock.__djHandlerAttached = true;
   trackSends(sock);
@@ -114,10 +125,16 @@ function attachHandler(sock, sessionId, config) {
   sock.ev.on('messages.upsert', async ({ messages, type }) => {
     if (type !== 'notify') return;
     for (const msg of messages) {
-      try { await onMessage(sock, sessionId, msg, config); }
+      try { await onMessage(sock, sessionId, msg); }
       catch (e) { console.error('[CMD] erreur:', e); }
     }
   });
 }
 
-module.exports = { attachHandler, onMessage };
+// Alias pour compatibilite avec index.js qui attend handleMessage(sock, msg)
+async function handleMessage(sock, msg) {
+  const sessionId = (sock.user && sock.user.id) || msg.key.remoteJid;
+  await onMessage(sock, sessionId, msg);
+}
+
+module.exports = { attachHandler, onMessage, handleMessage };
