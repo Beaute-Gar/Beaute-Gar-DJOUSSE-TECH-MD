@@ -1,0 +1,116 @@
+'use strict';
+/* Pont entre le bot (Baileys) et l'interface : jumelage, statut.
+   v2 : attend que le socket soit pret avant de demander le code,
+   reessaie, ne perd plus le socket en cas d'erreur, journalise tout. */
+let channel = null;
+const state = { status: 'idle', sock: null, number: null, qrSeen: false, extra: {}, busy: false };
+
+function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+function init(ch) { channel = ch; }
+function emit(ev, payload) { try { if (channel) channel.send(ev, payload); } catch (e) { /* ignore */ } }
+function emitStatus() { emit('bot:status', Object.assign({ state: state.status, number: state.number }, state.extra)); }
+function setStatus(s, extra) { state.status = s; state.extra = extra || {}; emitStatus(); }
+function getStatus() { return state.status; }
+function ownerNumber() { return state.number; }
+
+function isRegistered(sock) {
+  return !!(sock && sock.authState && sock.authState.creds && sock.authState.creds.registered);
+}
+
+function attach(sock) {
+  if (!sock || state.sock === sock) return;
+  state.sock = sock;
+  state.qrSeen = false;
+  console.log('[mobile] socket attache (enregistre=' + isRegistered(sock) + ')');
+  try {
+    if (!isRegistered(sock) && state.status !== 'awaiting_link') setStatus('needs_pairing');
+    sock.ev.on('connection.update', function (u) {
+      if (state.sock !== sock) return;
+      if (u.qr) { state.qrSeen = true; console.log('[mobile] socket pret (handshake termine)'); }
+      if (u.connection) console.log('[mobile] connection=' + u.connection);
+      if (u.connection === 'connecting') {
+        if (isRegistered(sock)) setStatus('connecting');
+      } else if (u.connection === 'open') {
+        const id = (sock.user && sock.user.id) || '';
+        state.number = id.split(':')[0].split('@')[0] || state.number;
+        setStatus('connected');
+      } else if (u.connection === 'close') {
+        const err = u.lastDisconnect && u.lastDisconnect.error;
+        const code = err && err.output && err.output.statusCode;
+        console.log('[mobile] connexion fermee, code=' + code);
+        if (code === 401) setStatus('logged_out', { code: code });
+        else if (isRegistered(sock)) setStatus('disconnected', { code: code || null });
+      }
+    });
+  } catch (e) {
+    console.error('[mobile] attach:', e && e.message);
+  }
+}
+
+async function waitQr(ms) {
+  const t = Date.now();
+  while (!state.qrSeen && Date.now() - t < ms) await sleep(250);
+  return state.qrSeen;
+}
+
+function withTimeout(p, ms) {
+  return Promise.race([
+    p,
+    new Promise(function (_, rej) { setTimeout(function () { rej(new Error('Delai depasse (' + Math.round(ms / 1000) + ' s). Verifie ta connexion Internet.')); }, ms); })
+  ]);
+}
+
+async function requestPairing(number) {
+  const n = String(number || '').replace(/\D/g, '');
+  console.log('[mobile] demande de code pour +' + n);
+  if (n.length < 8 || n.length > 15) { emit('pair:error', { message: 'Numero invalide (8 a 15 chiffres, avec indicatif).' }); return; }
+  if (state.busy) { emit('pair:error', { message: 'Une demande est deja en cours, patiente quelques secondes.' }); return; }
+  state.busy = true;
+  try {
+    state.number = n;
+    setStatus('waiting_socket');
+
+    const starter = globalThis.__DJOUSSE_START_SESSION__;
+    if (typeof starter !== 'function') {
+      console.error('[mobile] __DJOUSSE_START_SESSION__ absent : index.js a plante au chargement (voir erreurs plus haut).');
+      setStatus('crashed', { message: 'Moteur du bot non charge' });
+      emit('pair:error', { message: 'Le moteur du bot ne s\'est pas charge. Ouvre le Journal.' });
+      return;
+    }
+
+    let sock = await starter(n);
+    if (sock) attach(sock);
+    sock = state.sock;
+    if (!sock) { emit('pair:error', { message: 'Impossible de creer la connexion WhatsApp.' }); return; }
+    if (isRegistered(sock)) { emit('pair:error', { message: 'Un compte est deja lie. Reinitialise la session pour en lier un autre.' }); return; }
+
+    let lastErr = null;
+    for (let i = 1; i <= 3; i++) {
+      sock = state.sock || sock;
+      const ready = await waitQr(i === 1 ? 20000 : 10000);
+      console.log('[mobile] essai ' + i + '/3, socket pret=' + ready);
+      try {
+        const code = await withTimeout(sock.requestPairingCode(n), 30000);
+        console.log('[mobile] code genere');
+        const pretty = (String(code).match(/.{1,4}/g) || [code]).join('-');
+        setStatus('awaiting_link');
+        emit('pair:code', { code: pretty });
+        return;
+      } catch (e) {
+        lastErr = e;
+        console.error('[mobile] requestPairingCode essai ' + i + ' :', (e && e.message) || e);
+        await sleep(2500);
+      }
+    }
+    setStatus('needs_pairing');
+    emit('pair:error', { message: (lastErr && lastErr.message) || 'Echec de generation du code.' });
+  } catch (e) {
+    console.error('[mobile] requestPairing:', (e && e.stack) || e);
+    setStatus('needs_pairing');
+    emit('pair:error', { message: 'Erreur : ' + ((e && e.message) || e) });
+  } finally {
+    state.busy = false;
+  }
+}
+
+module.exports = { init: init, attach: attach, requestPairing: requestPairing, setStatus: setStatus, getStatus: getStatus, emitStatus: emitStatus, ownerNumber: ownerNumber, emit: emit };

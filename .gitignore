@@ -1,0 +1,9 @@
+node_modules/
+android/.gradle/
+android/app/build/
+android/local.properties
+www/nodejs/
+keystore/
+test-data/
+*.apk
+rapport-portage.txt

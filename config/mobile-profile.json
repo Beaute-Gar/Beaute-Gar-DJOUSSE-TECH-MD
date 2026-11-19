@@ -1,0 +1,34 @@
+{
+    "removeCommands":  [
+                           "09-owner/eval.js",
+                           "09-owner/exec.js",
+                           "09-owner/shutdown.js",
+                           "09-owner/restart.js",
+                           "09-owner/sessions.js",
+                           "04-sticker-media/sticker.js",
+                           "04-sticker-media/take.js",
+                           "04-sticker-media/steal.js",
+                           "04-sticker-media/toimg.js",
+                           "04-sticker-media/toaudio.js",
+                           "04-sticker-media/tovideo.js",
+                           "04-sticker-media/voice.js",
+                           "04-sticker-media/emojimix.js",
+                           "11-telechargement/ytmp3.js",
+                           "11-telechargement/ytmp4.js",
+                           "11-telechargement/play.js",
+                           "11-telechargement/gitclone.js"
+                       ],
+    "removeDeps":  [
+                       "canvas",
+                       "catozolala-card-canvas",
+                       "ffmpeg-static",
+                       "fluent-ffmpeg",
+                       "@distube/ytdl-core",
+                       "sharp",
+                       "ngrok",
+                       "pm2",
+                       "nodemon",
+                       "baileys",
+                       "@adiwajshing/baileys"
+                   ]
+}

@@ -1,0 +1,22 @@
+:root{--bg:#0b1020;--card:#141a33;--line:#252d52;--txt:#eef1ff;--mut:#9aa3c7;--blue:#3b82f6;--violet:#8b5cf6;--ok:#22c55e;--warn:#f59e0b;--err:#ef4444}
+*{box-sizing:border-box}
+html,body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1b2350,transparent),var(--bg);color:var(--txt);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{padding:env(safe-area-inset-top) 14px calc(env(safe-area-inset-bottom) + 24px)}
+header{display:flex;align-items:center;gap:12px;padding:16px 2px}
+header img{width:44px;height:44px;border-radius:12px}
+.ttl{flex:1}h1{margin:0;font-size:1.1rem;letter-spacing:.5px}.ttl p{margin:0;color:var(--mut);font-size:.8rem}
+.badge{font-size:.75rem;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}
+.badge.ok{color:var(--ok);border-color:var(--ok)}.badge.warn{color:var(--warn);border-color:var(--warn)}.badge.err{color:var(--err);border-color:var(--err)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+h2{margin:0 0 8px;font-size:1rem}
+label{display:block;margin:12px 0 4px;color:var(--mut);font-size:.85rem}
+select,input[type=tel]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0e1330;color:var(--txt);font-size:1rem}
+.btn{display:block;width:100%;margin-top:12px;padding:13px;border:0;border-radius:12px;font-size:1rem;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--blue),var(--violet))}
+.btn:disabled{opacity:.45}.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}.btn.danger{background:transparent;border:1px solid var(--err);color:var(--err)}
+.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)}
+.muted{color:var(--mut);font-size:.85rem}.tips{color:var(--mut);font-size:.82rem}
+.chk{display:flex;gap:10px;align-items:flex-start;color:var(--txt);font-size:.95rem}
+.code{font:700 2rem/1.2 ui-monospace,Menlo,monospace;letter-spacing:.2em;text-align:center;padding:16px;margin:12px 0 0;border-radius:12px;background:#0e1330;border:1px dashed var(--violet)}
+.steps{color:var(--mut);padding-left:20px;font-size:.9rem}
+pre{max-height:220px;overflow:auto;background:#080b1a;padding:10px;border-radius:10px;font-size:.72rem;white-space:pre-wrap;word-break:break-word}
+details{margin-top:10px}[hidden]{display:none!important}

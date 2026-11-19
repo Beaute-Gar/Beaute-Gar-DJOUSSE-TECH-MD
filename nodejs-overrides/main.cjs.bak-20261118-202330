@@ -1,0 +1,166 @@
+'use strict';
+/* Point d'entree mobile (capacitor-nodejs / Node.js Mobile, Node 18). */
+process.env.MOBILE = '1';
+process.env.NODE_ENV = 'production';
+
+try {
+  const dns = require('dns');
+  if (dns.setDefaultResultOrder) dns.setDefaultResultOrder('ipv4first');
+} catch (e) {}
+
+try { if (!globalThis.crypto) globalThis.crypto = require('crypto').webcrypto; } catch (e) { /* ignore */ }
+
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
+const { pathToFileURL } = require('url');
+
+const rawLog = console.log.bind(console);
+let channel;
+let realBridge = false;
+try {
+  channel = require('bridge').channel;
+  realBridge = true;
+} catch (e) {
+  channel = {
+    send: function (ev, p) { if (ev !== 'bot:log') rawLog('[bridge->UI] ' + ev + ' ' + JSON.stringify(p)); },
+    on: function () {},
+    addListener: function () {}
+  };
+}
+
+const runtime = require('./mobile-runtime.cjs');
+runtime.init(channel);
+
+// ---- Dossier de donnees prive (persiste aux mises a jour) ----
+const DATA = process.env.BOT_DATA_DIR ||
+  (process.env.DATADIR ? path.join(process.env.DATADIR, 'djousse') : path.join(__dirname, '..', '..', 'test-data'));
+
+process.env.BOT_DATA_DIR = DATA;
+
+['', 'storage', 'storage/sessions', 'storage/database', 'storage/backups', 'storage/logs', 'storage/downloads', 'vv', 'antidelete'].forEach(function (d) {
+  try { fs.mkdirSync(path.join(DATA, d), { recursive: true }); } catch (e) { /* ignore */ }
+});
+try { fs.rmSync(path.join(DATA, 'storage', 'bot.lock'), { force: true }); } catch (e) { /* ignore */ }
+try { fs.rmSync(path.join(DATA, 'bot.lock'), { force: true }); } catch (e) { /* ignore */ }
+
+function ensureSecret() {
+  const f = path.join(DATA, '.secret');
+  try { return fs.readFileSync(f, 'utf8').trim(); }
+  catch (e) {
+    const s = crypto.randomBytes(32).toString('hex');
+    try { fs.writeFileSync(f, s, { mode: 0o600 }); } catch (e2) { /* ignore */ }
+    return s;
+  }
+}
+
+process.env.MOBILE_SECRET = ensureSecret();
+try {
+  const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'mobile.config.json'), 'utf8'));
+  Object.keys(cfg).forEach(function (k) { if (process.env[k] === undefined) process.env[k] = String(cfg[k]); });
+} catch (e) { /* pas de config */ }
+
+// ---- Logs : memoire (300 lignes) + fichier (2 Mo max) + interface ----
+const logs = [];
+const LOG_FILE = path.join(DATA, 'storage', 'logs', 'mobile.log');
+let inLog = false;
+function fmt(a) {
+  if (typeof a === 'string') return a;
+  try { return a instanceof Error ? (a.stack || a.message) : JSON.stringify(a); } catch (e) { return String(a); }
+}
+['log', 'info', 'warn', 'error'].forEach(function (lvl) {
+  const orig = console[lvl].bind(console);
+  console[lvl] = function () {
+    const args = Array.prototype.slice.call(arguments);
+    if (!inLog) {
+      inLog = true;
+      try {
+        const line = '[' + new Date().toISOString().slice(11, 19) + '] ' + args.map(fmt).join(' ');
+        logs.push(line); if (logs.length > 300) logs.shift();
+        channel.send('bot:log', { line: line });
+        try {
+          if (fs.existsSync(LOG_FILE) && fs.statSync(LOG_FILE).size > 2097152) fs.writeFileSync(LOG_FILE, '');
+          fs.appendFileSync(LOG_FILE, line + '\n');
+        } catch (e) { /* ignore */ }
+      } catch (e) { /* ignore */ }
+      inLog = false;
+    }
+    orig.apply(null, args);
+  };
+});
+
+process.on('uncaughtException', function (e) { console.error('[uncaughtException]', (e && e.stack) || e); });
+process.on('unhandledRejection', function (e) { console.error('[unhandledRejection]', (e && e.stack) || e); });
+process.exit = function (code) {
+  console.error('[mobile] process.exit(' + code + ') bloque : un process.exit tuerait toute l\'appli');
+  runtime.setStatus('stopped', { code: code });
+};
+
+// ---- Messages venant de l'interface ----
+function on(ev, fn) {
+  const reg = channel.on || channel.addListener;
+  if (typeof reg === 'function') reg.call(channel, ev, fn);
+}
+
+on('pair:request', function (p) {
+  const num = (p && p.number) || (p && p.args && p.args[0] && p.args[0].number) || (typeof p === 'string' ? p : '');
+  runtime.requestPairing(num);
+});
+on('bot:status:get', function () { runtime.emitStatus(); });
+on('bot:logs:get', function () { channel.send('bot:logs', { lines: logs }); });
+on('session:reset', function () {
+  try {
+    ['sessions', 'auth_info_baileys', 'auth'].forEach(function (d) {
+      fs.rmSync(path.join(DATA, 'storage', d), { recursive: true, force: true });
+      fs.rmSync(path.join(DATA, d), { recursive: true, force: true });
+    });
+    fs.mkdirSync(path.join(DATA, 'storage', 'sessions'), { recursive: true });
+    channel.send('session:reset:done', {});
+    runtime.setStatus('needs_pairing');
+  } catch (e) { channel.send('pair:error', { message: 'Reinitialisation impossible : ' + e.message }); }
+});
+
+globalThis.__DJOUSSE_MOBILE__ = runtime;
+channel.send('node:ready', { node: process.version, data: DATA });
+runtime.setStatus('starting');
+
+// ---- Baileys 7 est un module ESM : require() echoue sur Node 18 (ERR_REQUIRE_ESM) ----
+// On le charge avec import() puis on le sert a tous les require('@whiskeysockets/baileys') du bot.
+async function prepareBaileys() {
+  const Module = require('module');
+  try {
+    require('@whiskeysockets/baileys');
+    console.log('[mobile] Baileys charge via require (Node ' + process.version + ')');
+    return;
+  } catch (e) {
+    if (!e || e.code !== 'ERR_REQUIRE_ESM') { console.error('[mobile] Baileys illisible :', (e && e.stack) || e); throw e; }
+  }
+  const ns = await import('@whiskeysockets/baileys');
+  const origLoad = Module._load;
+  Module._load = function (request) {
+    if (request === '@whiskeysockets/baileys') return ns;
+    return origLoad.apply(this, arguments);
+  };
+  console.log('[mobile] Baileys ESM charge via import() (Node ' + process.version + ')');
+}
+
+// ---- Demarrage du bot ----
+prepareBaileys()
+  .then(function () { return import(pathToFileURL(path.join(__dirname, 'index.js')).href); })
+  .then(function () {
+    console.log('[mobile] bot charge avec succes');
+    setTimeout(function () {
+      if (runtime.getStatus() === 'starting' || runtime.getStatus() === 'idle') {
+        runtime.setStatus('needs_pairing');
+      }
+    }, 1500);
+  })
+  .catch(function (e) {
+    console.error('[mobile] ECHEC chargement du bot :', (e && e.stack) || e);
+    runtime.setStatus('crashed', { message: String((e && e.message) || e) });
+  });
+
+// Test sur PC : $env:TEST_PAIR_NUMBER="237..." puis node main.cjs
+if (!realBridge && process.env.TEST_PAIR_NUMBER) {
+  setTimeout(function () { runtime.requestPairing(process.env.TEST_PAIR_NUMBER); }, 5000);
+}

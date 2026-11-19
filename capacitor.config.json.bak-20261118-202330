@@ -1,0 +1,12 @@
+{
+  "appId": "com.djoussetech.md",
+  "appName": "DJOUSSE TECH MD",
+  "webDir": "www",
+  "android": { "allowMixedContent": false },
+  "plugins": {
+    "CapacitorNodeJS": {
+      "nodeDir": "nodejs",
+      "startMode": "manual"
+    }
+  }
+}

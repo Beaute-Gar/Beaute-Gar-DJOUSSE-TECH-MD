@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <title>DJOUSSE TECH MD</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header>
+    <img src="img/logo-512.png" alt="" onerror="this.style.display='none'">
+    <div class="ttl"><h1>DJOUSSE TECH MD</h1><p>Bot WhatsApp local</p></div>
+    <span id="badge" class="badge warn">Démarrage…</span>
+  </header>
+
+  <main>
+    <section id="s-warn" class="card" hidden>
+      <h2>Avant de commencer</h2>
+      <p>Ce bot utilise une connexion WhatsApp <strong>non officielle</strong>. Ton numéro peut être limité ou banni par WhatsApp. Utilise-le à tes risques, de préférence avec un numéro secondaire.</p>
+      <p>Tout fonctionne sur ton téléphone : aucune donnée n'est envoyée à un serveur DJOUSSE TECH.</p>
+      <label class="chk"><input type="checkbox" id="accept"> J'ai compris et j'accepte</label>
+      <button id="btn-accept" class="btn" disabled>Continuer</button>
+    </section>
+
+    <section id="s-setup" class="card" hidden>
+      <h2>1. Garder le bot actif</h2>
+      <p class="muted">Sans ces réglages, Android arrête le bot quand l'écran est verrouillé.</p>
+      <div class="row"><span>Économie de batterie</span><b id="bat-state">…</b></div>
+      <button id="btn-bat" class="btn ghost">Autoriser l'exécution en arrière-plan</button>
+      <button id="btn-auto" class="btn ghost">Ouvrir les réglages de démarrage automatique</button>
+      <p id="tips" class="tips"></p>
+    </section>
+
+    <section id="s-pair" class="card" hidden>
+      <h2>2. Lier ton WhatsApp</h2>
+      <label for="country">Pays</label>
+      <select id="country"></select>
+      <label for="num">Numéro WhatsApp</label>
+      <input id="num" type="tel" inputmode="tel" autocomplete="off" placeholder="6XX XX XX XX">
+      <button id="btn-pair" class="btn">Obtenir le code</button>
+      <p id="pair-msg" class="muted"></p>
+      <div id="code-box" hidden>
+        <div id="code" class="code">----</div>
+        <button id="btn-copy" class="btn ghost">Copier le code</button>
+        <ol class="steps">
+          <li>Ouvre WhatsApp sur ce téléphone</li>
+          <li>Réglages › Appareils connectés › Connecter un appareil</li>
+          <li>Choisis « Associer avec un numéro de téléphone »</li>
+          <li>Saisis le code ci-dessus</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="s-status" class="card" hidden>
+      <h2>Statut</h2>
+      <div class="row"><span>État</span><b id="st-text">…</b></div>
+      <div class="row"><span>Numéro</span><b id="st-num">—</b></div>
+      <details><summary>Journal</summary><pre id="logs"></pre></details>
+      <button id="btn-reset" class="btn danger">Réinitialiser la session</button>
+    </section>
+  </main>
+  <script src="js/app.js"></script>
+</body>
+</html>
