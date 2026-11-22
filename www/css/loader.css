@@ -1,0 +1,110 @@
+/* ============================================================
+   DJOUSSE TECH MD - Écran de chargement
+   ============================================================ */
+
+#loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0b1020 0%, #1a1f3a 50%, #0b1020 100%);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+}
+
+.loader-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none;
+}
+
+.logo-container {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 30px;
+  position: relative;
+  animation: logo-pulse 2s infinite ease-in-out;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+  animation: logo-spin 3s linear infinite;
+}
+
+@keyframes logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes logo-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(139, 92, 246, 0.4); }
+  50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(139, 92, 246, 0.7); }
+}
+
+.loader-text {
+  color: #eef1ff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 40px;
+  animation: text-glow 2s ease-in-out infinite;
+}
+
+@keyframes text-glow {
+  0%, 100% { color: #eef1ff; text-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+  50% { color: #a78bfa; text-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
+}
+
+.progress-container {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 10px;
+  animation: progress-animation 3s ease-in-out forwards;
+}
+
+@keyframes progress-animation {
+  0% { width: 0%; }
+  20% { width: 30%; }
+  40% { width: 55%; }
+  60% { width: 75%; }
+  80% { width: 90%; }
+  100% { width: 100%; }
+}
+
+.progress-text {
+  color: #9aa3c7;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: text-pulse 2s ease-in-out infinite;
+}
+
+@keyframes text-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.social-text {
+  margin-top: 30px;
+  color: #64748b;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
